@@ -1,24 +1,40 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import MainSlide from './main/MainSlide';
+import MovieListNowPlaying from './List/MovieListNowPlaying';
+import MainHeader from './main/MainHeader';
+import MovieListUpcoming from './List/MovieListUpcoming';
+import MovieListTopRated from './List/MovieListTopRated';
+import MainFooter from './main/MainFooter';
+import MypageCon from './mypage/MypageCon';
+import MypageProfile from './mypage/MypageProfile';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-function App() {
+
+function App() {  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={
+            <div>
+              <MainHeader />
+              <MainSlide />
+              <MovieListNowPlaying />
+              <MovieListUpcoming />
+              <MovieListTopRated />
+              <MainFooter />
+            </div>
+          }/>
+          <Route path="/myPage" element={
+          <div>
+              <MainHeader />
+              <MypageProfile />
+              <MypageCon />
+              <MainFooter />
+          </div>
+          } />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
