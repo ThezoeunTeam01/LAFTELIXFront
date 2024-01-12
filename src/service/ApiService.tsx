@@ -1,4 +1,5 @@
 import { API_BASE_URL } from "../api-config";
+import Login from "../member/Login";
 
 interface RequestOption {
   headers: Headers;
@@ -55,7 +56,7 @@ export async function call(api: string, method: string, request?: object): Promi
   }
 }
 
-export async function signin(LoginDTO: LoginDTO): Promise<void> {
+export async function signin(LoginDTO: LoginDTO): Promise<any> {
   try {
     const response = await call("/member/signin","POST", LoginDTO);
     if(response.token){
@@ -64,9 +65,10 @@ export async function signin(LoginDTO: LoginDTO): Promise<void> {
       localStorage.setItem("username",response.username);
       localStorage.setItem("img",response.img);
       window.location.href="/";
-    } else {
-      window.location.href="/fail";
-    }
+    }else{
+      return "login_fail";
+      
+    } 
   } catch (error) {
     console.log(error);
   }

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Button, Container, Form, Modal } from "react-bootstrap";
+import React, { useRef, useState } from "react";
+import { Button, Container, Form, Modal, Overlay, Tooltip } from "react-bootstrap";
 import { signin } from "../service/ApiService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -12,6 +12,9 @@ type LoginProps = {
 // 헤더 버튼에 연결하기 위해 수정
 function Login({ show, onHide }: LoginProps) {
   const [modalShow, setModalShow] = useState<boolean>(false);
+  //
+  const [loginShow, setLoginShow] = useState(false);
+  const target = useRef(null);
 
   const showModal = () => setModalShow(true);
   const closeModal = () => {
@@ -40,8 +43,11 @@ function Login({ show, onHide }: LoginProps) {
     
   };
 
-  const login = () => {
-    signin(loginInfo);
+  const login = async () => {
+    const response = await signin(loginInfo);
+    if(response === "login_fail") {
+      setLoginShow(!loginShow);
+    }
   }
 
   return(
@@ -71,8 +77,15 @@ function Login({ show, onHide }: LoginProps) {
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="submit">
-              <Button as="input" type="button" value="Login" style={{width:`100%`}} onClick={login} className="submitBtn fs-5 font-bold" />
-            </Form.Group>
+              <Button ref={target} as="input" type="button" value="Login" style={{width:`100%`}} onClick={login} className="submitBtn fs-5 font-bold" />
+              <Overlay target={target.current} show={loginShow} placement="right">
+              {(props) => (
+                <Tooltip id="overlay-example" {...props}>
+                  아이디와 비밀번호를 확인해 주세요.
+                </Tooltip>
+              )}
+            </Overlay>
+                  </Form.Group>
           </Form>
 
           {/* 소셜 로그인 */}
