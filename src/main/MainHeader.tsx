@@ -135,7 +135,7 @@ function MainHeader() {
 
   return (
     <Navbar fixed="top" style={{zIndex:20, paddingTop:`20px`, paddingBottom:`20px`, height:`80px`,
-    background: scrolling ? 'linear-gradient(to bottom, black, black)' : 'linear-gradient(to bottom, black, rgba(0, 0, 0, 0.4))' }}>
+    background: scrolling ? 'linear-gradient(to bottom, black, black)' : 'linear-gradient(to bottom, black, rgba(0, 0, 0, 0.03))' }}>
       <div className="position-absolute" style={{ width: "100%", height:`80px`}}>
       <Container className="position-relative">
         <div className="d-flex align-items-center" style={{ width: "100%", height:`80px`}}>

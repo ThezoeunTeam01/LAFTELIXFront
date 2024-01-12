@@ -59,16 +59,19 @@ const MainSlide: FC = () => {
 
   return (
     // interval={null} - 슬라이드 멈추고 싶으면 추가
-    <Carousel fade className="">
+    <Carousel fade className="" interval={null}>
       {movies.map((movie: IMovie) => (
         <CarouselItem key={movie.id}>
-          <div className="w-100 h-100 position-absolute top-0 start-0 dimBg"></div>
-          <div className="">
-            <img
-              src={`https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`}
-              alt={movie.title}
-              className="vw-100 vh-100"
-            />
+          <div className="vw-100 vh-100">
+            <div className="w-100 h-100 position-absolute top-0 start-0 dimBg"></div>
+            {/* <div className=""> */}
+              <img
+                src={`https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`}
+                alt={movie.title}
+                className="vw-100 vh-100"
+                style={{objectFit: `cover`}}
+              />
+            {/* </div> */}
           </div>
           
             <Carousel.Caption>
