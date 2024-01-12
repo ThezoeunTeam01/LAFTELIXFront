@@ -8,13 +8,6 @@ import SelectMovie from "./SelectMovie";
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-<style>
-{`
-  .my-custom-carousel .carousel-indicators {
-    display: none important;
-  }
-`}
-</style>
 
 interface IMovie {
   id: number;

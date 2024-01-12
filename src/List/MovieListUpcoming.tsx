@@ -8,14 +8,6 @@ import SelectMovie from "./SelectMovie";
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-<style>
-{`
-  .my-custom-carousel .carousel-indicators {
-    display: none important;
-  }
-`}
-</style>
-
 interface IMovie {
   id: number;
   backdrop_path: string;
@@ -133,7 +125,7 @@ const MovieListUpcoming: FC = () => {
   return (
 
     <Container style={{paddingTop:`40px`, paddingBottom: `40px`}}>
-      <h2 className="fs-3 mt-3 mb-3 text-light fw-bold">현재 상영작</h2>
+      <h2 className="fs-3 mt-3 mb-3 text-light fw-bold">상영 예정작</h2>
       <div className="position-relative pt20">
       <Carousel className="w-100 my-custom-carousel"
       activeIndex={index}

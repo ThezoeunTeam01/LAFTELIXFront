@@ -60,9 +60,15 @@ git status
 
 git add .
 
-- 스테이징 영역에서 제거
 
-git restore --staged README.md
+- 스테이징에 올린 모든 파일 스테이징 영역에서 제거
+
+git restore --staged .
+
+- 스테이징에 올린 특정 파일만 스테이징 영역에서 제거
+
+git restore --staged 파일명.확장자
+
 
 - 특정 파일만 스테이징에 올리기 
 

@@ -322,8 +322,6 @@ function MypageProfile() {
                     </Modal>
                 </Modal>
             </div>
-            {/* <Button variant="primary">회원정보 수정</Button>{" "} */}
-            {/* <Button variant="secondary" onClick={handleLogOut}>로그아웃</Button>{" "} */}
         </Col>
       </Row>
     </Container>

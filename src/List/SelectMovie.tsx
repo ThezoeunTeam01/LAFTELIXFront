@@ -7,13 +7,7 @@ import ShowReply from "../reply/ShowReply";
 import { ListGroup, Overlay, Tooltip } from "react-bootstrap";
 
 import { Button, Container, Modal } from "react-bootstrap";
-import {
-  faHeart,
-  faPlay,
-  faPlayCircle,
-  faSquareCaretRight,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
+import {faHeart, faPlay, faXmark,} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import Row from "react-bootstrap/Row";
@@ -25,6 +19,9 @@ import Tabs from "react-bootstrap/Tabs";
 // sass 파일
 import '../style/custom.scss';
 import MovieListSimilar from "./MovieListSimilar";
+
+// 로딩바 추가
+import loadingBar from '../image/loadingBar.svg';
 
 interface SelectMovie {
   movieId: number;
@@ -81,9 +78,16 @@ function SelectMovie({
   // 찜한 영화 목록을 저장하는 상태
   const [movie, setMovie] = useState<SelectMovie | null>(null);
   const [isLiked, setIsLiked] = useState<LikeButton | false | true>(false);
+  
+  // API 정보 불러올 때까지 로딩바 처리하기
+  const [loading, setLoading] = useState(true);
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // API 호출 전에 로딩 상태를 true로 설정
+        setLoading(true);      	
+        console.log("로딩바 실행되고 있음??",setLoading);
         // 로그인시 토큰값으로 진행 검증
         if (accessToken != null) {
           const likeMoviesPromise = call("/like/likeReadButton", "POST", {
@@ -103,6 +107,9 @@ function SelectMovie({
           `https://api.themoviedb.org/3/movie/${movieId}?api_key=9c8709e24862b7b00803591402286323&language=ko-KR`
         );
         setMovie(response.data);
+        // API 호출 후에 데이터 설정 및 로딩 상태를 false로 설정
+        setLoading(false);
+        console.log("로딩바 끝남??",setLoading);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -159,7 +166,6 @@ function SelectMovie({
   };
 
   // 댓글 작업
-
   const username = localStorage.getItem("username") || "";
   const img = localStorage.getItem("img") || "";
 
@@ -218,7 +224,15 @@ function SelectMovie({
         <Modal.Header className="bgColorBk borderTrans pd30 position-relative">
           <Button  onClick={closeModal1}className="backTrans borderTrans position-absolute top-50 end-0 translate-middle-y"><FontAwesomeIcon icon={faXmark} className="fs-4 btnAnimation closeBtn" /></Button>
         </Modal.Header>
-        <Modal.Body className="bgColorBk" style={{ padding: `0px` }}>
+        <Modal.Body className="bgColorBk" style={{ padding: `0px` }}>        
+
+        {loading ? (  
+          // API 불러오는 동안 노출될 로딩바
+          <div className="d-flex align-items-center justify-content-center" style={{minHeight:`500px`}}>
+            <img src={loadingBar} alt="My SVG" />
+          </div>
+          ) : (
+          <div>
           {movie && (
             <div className="d-flex">
               <div
@@ -343,8 +357,16 @@ function SelectMovie({
                   </Col>
                 </Row>
               </div>
-            </div> /* 컨테이너 내부 div */
-          )}
+        </div>
+      )} {/* 무비맵 end */}
+      </div>
+      )}
+
+
+
+
+
+
 
           <Tabs
             defaultActiveKey="like"

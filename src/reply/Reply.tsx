@@ -74,17 +74,8 @@ function Reply({username, movieId, img, replySubmit}:ReplyProps) {
     <Form className="pd30 border-bottom border-2 border-dark">
       <h4 className="text-white fs-5 mb30 fw-bold">리뷰 작성하기</h4>
       <Row>
-        {/* <Col className="d-flex ">
-          <Form.Group controlId="username">
-            <Form.Label className="">
-              <p className="text-white fs-5">{username}</p>
-              <Image src={`/image/${img}`} alt="img" style={{width:`100px`, height:`100px`}} className="rounded" />
-            </Form.Label>
-          </Form.Group>
-        </Col> */}
         <Col xs={10} className="">
           <Form.Group controlId="username">
-            {/* <Form.Label><p className="text-white">{username}</p></Form.Label> */}
             <Form.Control type="text" maxLength={200} placeholder="reply" value={replyInfo.content} onChange={inputChange} onKeyDown={onEnter} className="replyInput" />
           </Form.Group>
         </Col>

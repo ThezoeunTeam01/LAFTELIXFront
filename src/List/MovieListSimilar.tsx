@@ -76,8 +76,6 @@ const MovieListSimilar: FC = () => {
       activeIndex={index}
       onSelect={handleSelect}
       interval={null}
-      // prevIcon={<span aria-hidden="true" className="carousel-control-prev-icon" />}
-      // nextIcon={<span aria-hidden="true" className="carousel-control-next-icon" />}
       nextIcon={null} // 기존 next 화살표 숨김
       prevIcon={null} // 기존 prev 화살표 숨김
       >{groupedMovies.map((group, index) => (
