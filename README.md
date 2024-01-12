@@ -1,7 +1,8 @@
 
 # 주의 사항
 
-git에서 clone 진행 후 node module 설치를 위해 npm install 실행!!
+프로젝트 깃허브 레퍼지토리에는 node module이 업로드 되어 있지 않기 때문에 
+git clone 진행 후 node module 설치를 위해 npm install 실행할 것!
 
 
 # git bash 터미널 사용하기 
@@ -14,6 +15,9 @@ git status
 
 git add .
 
+스테이징 영역에서 제거
+
+git restore --staged README.md
 
 특정 파일만 스테이징에 올리기 
 
@@ -26,6 +30,15 @@ git commit -m "커밋 메시지”
 커밋한 파일 푸시하기
 
 git push origin main
+
+현재 저장소 사용자 정보 확인하기 
+
+git config user.name
+git config user.email
+
+
+
+
 
 
 # Getting Started with Create React App
