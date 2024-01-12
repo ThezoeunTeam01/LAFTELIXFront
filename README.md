@@ -1,3 +1,33 @@
+
+# 주의 사항
+
+git에서 clone 진행 후 node module 설치를 위해 npm install 실행!!
+
+
+# git bash 터미널 사용하기 
+
+수정사항이 있는지 확인하기
+
+git status
+
+수정 파일 전체 스테이징에 올리기
+
+git add .
+
+
+특정 파일만 스테이징에 올리기 
+
+git add 파일명
+
+커밋
+
+git commit -m "커밋 메시지”
+
+커밋한 파일 푸시하기
+
+git push origin main
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -44,3 +74,10 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+
+
+
+
+
+
