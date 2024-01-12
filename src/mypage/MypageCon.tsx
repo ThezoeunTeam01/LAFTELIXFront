@@ -25,7 +25,16 @@ function MypageCon() {
 
   const userId = localStorage.getItem("userId");
 
+  const token = localStorage.getItem("ACCESS_TOKEN");
+
   const fetchData = async () => {
+
+    if(token === null) {
+      alert("로그인이 필요한 페이지입니다.");
+      window.location.href="/";
+      return;      
+    }
+
     try {
       const movieListResponse = await call("/like/likeRead", "POST", { userId: userId });
       const movieList = movieListResponse.data;
