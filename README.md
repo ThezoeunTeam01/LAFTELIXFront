@@ -2,42 +2,86 @@
 # 주의 사항
 
 프로젝트 깃허브 레퍼지토리에는 node module이 업로드 되어 있지 않기 때문에 
-git clone 진행 후 node module 설치를 위해 npm install 실행할 것!
+git clone 진행 후 node module 설치를 위해 반드시 npm install 실행할 것!
+
+# 추가 npm install 
+
+- 폰트어썸 - svg 아이콘 
+
+npm install --save @fortawesome/fontawesome-svg-core
+npm install --save @fortawesome/free-solid-svg-icons
+npm install --save @fortawesome/react-fontawesome
+
+- 리액트 부트스트랩
+
+사용 상세 : (https://react-bootstrap.netlify.app/)
+
+npm install react-bootstrap bootstrap
 
 
-# git bash 터미널 사용하기 
+# 깃 config 설정 - 사용자 설정
 
-수정사항이 있는지 확인하기
-
-git status
-
-수정 파일 전체 스테이징에 올리기
-
-git add .
-
-스테이징 영역에서 제거
-
-git restore --staged README.md
-
-특정 파일만 스테이징에 올리기 
-
-git add 파일명
-
-커밋
-
-git commit -m "커밋 메시지”
-
-커밋한 파일 푸시하기
-
-git push origin main
-
-현재 저장소 사용자 정보 확인하기 
+-현재 저장소 사용자 정보 확인하기 
 
 git config user.name
 git config user.email
 
 
+-전역(Git 전역 설정) 사용자 정보 확인
 
+git config --global user.name
+git config --global user.email
+
+
+-전역(Git 전역 설정) 사용자 정보 설정 하기
+
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+
+
+-현재 저장소 사용자 설정 하기
+
+git config user.name "Your Name"
+git config user.email "your.email@example.com"
+
+
+-설정 완료 후 사용자 정보 확인 방법
+
+git config --list
+
+
+# git bash 터미널 사용하기 
+
+- 수정사항이 있는지 확인하기
+
+git status
+
+- 수정 파일 전체 스테이징에 올리기
+
+git add .
+
+- 스테이징 영역에서 제거
+
+git restore --staged README.md
+
+- 특정 파일만 스테이징에 올리기 
+
+git add 파일명
+
+- 커밋 ( 메세지는 작성하지 않아도 됨 )
+
+git commit -m "커밋 메시지”
+
+- 메세지 없이 커밋하는 방법 - 불편하니까 그냥 커밋 메세지 작성해서 올리도록 하자.
+
+git commit 
+
+후 에디터 실행되면, esc 키 누르고 :wq 입력하고 enter키 누르면 빠져나옴
+
+
+- 커밋한 파일 저장소에 푸시하기
+
+git push origin main
 
 
 
@@ -87,10 +131,4 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
-
-
-
-
-
-
 
