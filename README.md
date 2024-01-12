@@ -90,6 +90,10 @@ git commit
 git push origin main
 
 
+- 레퍼지토리에서 소스 pull 받아오기
+
+git pull origin main 
+
 
 # Getting Started with Create React App
 

@@ -87,7 +87,6 @@ function SelectMovie({
       try {
         // API 호출 전에 로딩 상태를 true로 설정
         setLoading(true);      	
-        console.log("로딩바 실행되고 있음??",setLoading);
         // 로그인시 토큰값으로 진행 검증
         if (accessToken != null) {
           const likeMoviesPromise = call("/like/likeReadButton", "POST", {
@@ -109,7 +108,6 @@ function SelectMovie({
         setMovie(response.data);
         // API 호출 후에 데이터 설정 및 로딩 상태를 false로 설정
         setLoading(false);
-        console.log("로딩바 끝남??",setLoading);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
