@@ -8,9 +8,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 type ReplyInfo = {
   rno:number;
+  contentType:string;
   username:string;
-  movieId:number|null;
-  content:string;
+  contentId:number|null;
+  reply:string;
   img:string;
 }
 
@@ -31,7 +32,7 @@ function ShowReply({replyInfo, updateReplyInfos, deleteReplyInfos}:ShowReplyProp
   const [button, setButton] = useState("수정");
 
   const changeInput = (e:React.ChangeEvent<HTMLInputElement>) => {
-    setUpdateContent({...updateContent, content:e.target.value});
+    setUpdateContent({...updateContent, reply:e.target.value});
   }
 
   //수정 버튼
@@ -78,7 +79,7 @@ function ShowReply({replyInfo, updateReplyInfos, deleteReplyInfos}:ShowReplyProp
         <Row>          
           <Col xs={10}>
             <Form.Group controlId="content">
-              <Form.Control type="text"  maxLength={200} placeholder="reply" value={updateContent.content} onChange={changeInput} readOnly={isReadOnly} onKeyDown={onEnter} className="replyInput" />
+              <Form.Control type="text"  maxLength={200} placeholder="reply" value={updateContent.reply} onChange={changeInput} readOnly={isReadOnly} onKeyDown={onEnter} className="replyInput" />
             </Form.Group>
           </Col>
           <Col className="d-flex col gap-2 justify-content-end">

@@ -6,7 +6,7 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import axios from "axios";
 import { call } from "../service/ApiService";
-import SelectMovie from "../List/SelectMovie";
+import SelectContents from "../List/SelectContents";
 
 interface IMovie {
   id: number;
@@ -112,10 +112,11 @@ function MypageCon() {
 
       </Tabs>
       {selectedMovieId && (
-        <SelectMovie
+        <SelectContents
           showModal={showModal}
           setShowModal={setShowModal}
-          movieId={selectedMovieId}
+          contentId={selectedMovieId}  // 여기에서 selectedMovieId를 사용하세요
+          contentType="movie"          // 영화에 대한 contentType이라고 가정합니다
           closeModal={closeModal}
         />
       )}

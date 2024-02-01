@@ -1,14 +1,15 @@
 import React from 'react';
 import MainSlide from './main/MainSlide';
-import MovieListNowPlaying from './List/MovieListNowPlaying';
+import TVAniList from './List/TVAniList';
 import MainHeader from './main/MainHeader';
-import MovieListUpcoming from './List/MovieListUpcoming';
-import MovieListTopRated from './List/MovieListTopRated';
 import MainFooter from './main/MainFooter';
-import MypageCon from './mypage/MypageCon';
+//import MypageCon from './mypage/MypageCon';
 import MypageProfile from './mypage/MypageProfile';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-
+import Landing from './landing/Landing';
+import LandingBanner from './landing/LandingBanner';
+import SeriesComp from './List/SeriesComp';
+import MovieComp from './List/MovieComp';
 
 function App() {  
   return (
@@ -19,9 +20,8 @@ function App() {
             <div>
               <MainHeader />
               <MainSlide />
-              <MovieListNowPlaying />
-              <MovieListUpcoming />
-              <MovieListTopRated />
+              <TVAniList />
+              <LandingBanner />
               <MainFooter />
             </div>
           }/>
@@ -29,9 +29,24 @@ function App() {
           <div>
               <MainHeader />
               <MypageProfile />
-              <MypageCon />
+              {/* <MypageCon /> */}
               <MainFooter />
           </div>
+          } />
+          <Route path="/SeriesComp" element={
+            <div>
+              <MainHeader />
+              <SeriesComp />
+            </div>
+          } />
+          <Route path="/MovieComp" element={
+            <div>
+              <MainHeader />
+              <MovieComp />
+            </div>
+          } />          
+          <Route path="/landing" element={
+            <Landing />
           } />
         </Routes>
       </BrowserRouter>

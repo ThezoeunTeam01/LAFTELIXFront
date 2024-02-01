@@ -18,6 +18,7 @@ npm install --save @fortawesome/react-fontawesome
 
 npm install react-bootstrap bootstrap
 
+# 작업자 A가 install 했던 내역은 다른 작업자들이 pull받은 후 npm install하면 전부 자동 적용됩니다.
 
 # 깃 config 설정 - 사용자 설정
 

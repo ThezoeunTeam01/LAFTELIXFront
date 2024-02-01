@@ -9,7 +9,8 @@ import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 
 interface ReplyProps {
   username:string;
-  movieId:number;
+  contentType:string;
+  contentId:number;
   img:string;
   replySubmit: (replyInfo:ReplyInfo) => void;
 }
@@ -17,20 +18,22 @@ interface ReplyProps {
 interface ReplyInfo {
   rno:number;
   username:string;
-  movieId:number|null;
-  content:string;
+  contentId:number|null;
+  contentType:string;
+  reply:string;
   img:string;
 }
 
-function Reply({username, movieId, img, replySubmit}:ReplyProps) {
+function Reply({username, contentType, contentId, img, replySubmit}:ReplyProps) {
   const accessToken = localStorage.getItem("ACCESS_TOKEN"); // 토큰값 설정
   const [show, setShow] = useState(false); // 경고창 세팅
 
   const [replyInfo, setReplyInfo] = useState<ReplyInfo>({
     rno:0,
     username:"",
-    movieId:null,
-    content:"",
+    contentType:"",
+    contentId:null,
+    reply:"",
     img:""
   });
 
@@ -39,9 +42,10 @@ function Reply({username, movieId, img, replySubmit}:ReplyProps) {
       setReplyInfo({
         rno:0,
         username:username,
-        movieId:movieId,
+        contentType:contentType,
+        contentId:contentId,
         img:img,
-        content:e.target.value
+        reply:e.target.value
       })
   }
 
@@ -51,14 +55,15 @@ function Reply({username, movieId, img, replySubmit}:ReplyProps) {
       setShow(true);
     } else {
       e.preventDefault();
-      if (replyInfo.content !== null) {
+      if (replyInfo.reply !== null) {
         replySubmit(replyInfo);
         setReplyInfo({
           rno: 0,
+          contentType:"",
           username: "",
-          movieId: null,
+          contentId: null,
           img: "",
-          content: "",
+          reply: "",
         });
       }
     }
@@ -76,7 +81,7 @@ function Reply({username, movieId, img, replySubmit}:ReplyProps) {
       <Row>
         <Col xs={10} className="">
           <Form.Group controlId="username">
-            <Form.Control type="text" maxLength={200} placeholder="reply" value={replyInfo.content} onChange={inputChange} onKeyDown={onEnter} className="replyInput" />
+            <Form.Control type="text" maxLength={200} placeholder="reply" value={replyInfo.reply} onChange={inputChange} onKeyDown={onEnter} className="replyInput" />
           </Form.Group>
         </Col>
         <Col className="">

@@ -10,7 +10,8 @@ import Login from '../member/Login'; // Login.js 파일을 import
 import Register from '../member/Register'; // Register.js 파일을 import
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell, faCaretDown } from "@fortawesome/free-solid-svg-icons";
-
+import { Link } from "react-router-dom" 
+import { NavLink } from 'react-router-dom';
 
 function MainHeader() {
   const [show, setShow] = useState(false);
@@ -144,8 +145,11 @@ function MainHeader() {
         </Navbar.Brand>
         <Nav className="me-auto">
           <Nav.Link href="/" className="text-white">홈</Nav.Link>
+          <Link to='/SeriesComp'className="text-white nav-link">시리즈</Link>
+          <Link to='/MovieComp' className="text-white nav-link">영화</Link>
           {/* <Nav.Link href="/mypage" className="text-white">마이페이지</Nav.Link> */}
         </Nav>
+
         <Nav className="d-flex justify-content-end text-white">
           <Button variant="black" ref={target} onClick={() => setShow(!show)} className="text-white">
             {toggleIcon}
