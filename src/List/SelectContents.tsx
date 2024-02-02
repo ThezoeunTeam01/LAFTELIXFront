@@ -18,7 +18,7 @@ import Tabs from "react-bootstrap/Tabs";
 
 // sass 파일
 import "../style/custom.scss";
-import MovieListSimilar from "./MovieListSimilar";
+import ContentListSimilar from "./ContentListSimilar";
 
 // 로딩바 추가
 import loadingBar from "../image/loadingBar.svg";
@@ -45,7 +45,7 @@ interface ReplyInfos {
 type ReplyInfo = {
   rno: number;
   username: string;
-  contentId: number|null;
+  contentId: number | null;
   contentType: string;
   reply: string;
   img: string;
@@ -102,7 +102,7 @@ function SelectContents({
             setIsLiked(true);
             //무비 아이디에 좋아요 표시될 경우 하트 이모티콘 색상 추가
             setHeartColor(true);
-          }else{
+          } else {
             setIsLiked(false);
             setHeartColor(false);
           }
@@ -178,7 +178,10 @@ function SelectContents({
 
   const fetchData = async () => {
     // ID만 들어감 타입도 넣어줘야함
-    const response = await call(`/reply?contentType=${contentType}&contentId=${contentId}`, "GET");
+    const response = await call(
+      `/reply?contentType=${contentType}&contentId=${contentId}`,
+      "GET"
+    );
     setReplyInfos(response);
   };
   useEffect(() => {
@@ -422,7 +425,11 @@ function SelectContents({
             </Tab>
             <Tab eventKey="home" title="비슷한 콘텐츠">
               <div className="pd30">
-                {/* <MovieListSimilar /> */}
+                {" "}
+                <ContentListSimilar
+                  contentType={contentType}
+                  contentId={contentId}
+                />
               </div>
             </Tab>
           </Tabs>

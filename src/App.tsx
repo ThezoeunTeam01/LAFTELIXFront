@@ -3,7 +3,7 @@ import MainSlide from './main/MainSlide';
 import TVAniList from './List/TVAniList';
 import MainHeader from './main/MainHeader';
 import MainFooter from './main/MainFooter';
-//import MypageCon from './mypage/MypageCon';
+import MypageCon from './mypage/MypageCon';
 import MypageProfile from './mypage/MypageProfile';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Landing from './landing/Landing';
@@ -29,7 +29,7 @@ function App() {
           <div>
               <MainHeader />
               <MypageProfile />
-              {/* <MypageCon /> */}
+              <MypageCon />
               <MainFooter />
           </div>
           } />

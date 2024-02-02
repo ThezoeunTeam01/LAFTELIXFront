@@ -8,56 +8,62 @@ import axios from "axios";
 import { call } from "../service/ApiService";
 import SelectContents from "../List/SelectContents";
 
-interface IMovie {
+interface Content {
   id: number;
   backdrop_path: string;
   title: string;
   poster_path: string;
+  type: string;
 }
 
-interface LikeMovies {
-  movieId: number;
+interface LikeContents {
+  contentId: number;
+  contentType: string;
 }
 
 function MypageCon() {
-  const [movies, setMovies] = useState<IMovie[]>([]);
-  const [likeMovieList, setLikeMovieList] = useState<LikeMovies[]>([]);
+  const [movies, setMovies] = useState<Content[]>([]);
+  const [likeContentList, setLikeContentList] = useState<LikeContents[]>([]);
 
   const userId = localStorage.getItem("userId");
 
   const token = localStorage.getItem("ACCESS_TOKEN");
 
   const fetchData = async () => {
-
-    if(token === null) {
+    if (token === null) {
       alert("로그인이 필요한 페이지입니다.");
-      window.location.href="/";
-      return;      
+      window.location.href = "/";
+      return;
     }
 
     try {
-      const movieListResponse = await call("/like/likeRead", "POST", { userId: userId });
+      const movieListResponse = await call("/like/likeRead", "POST", {
+        userId: userId,
+      });
       const movieList = movieListResponse.data;
-      
+
       // 상태 업데이트
-      setLikeMovieList(movieList);
-      
+      setLikeContentList(movieList);
+
       // 좋아요 영화 가져오기
-      const moviePromises = movieList.map((movie:LikeMovies) =>
-        axios.get(
-          `https://api.themoviedb.org/3/movie/${movie.movieId}?api_key=9c8709e24862b7b00803591402286323&language=ko-KR`
-        )
+      const moviePromises = movieList.map((content: LikeContents) =>
+        axios
+          .get(
+            `https://api.themoviedb.org/3/${content.contentType}/${content.contentId}?api_key=9c8709e24862b7b00803591402286323&language=ko-KR`
+          )
+          .then((response) => ({
+            ...response.data, // 기존의 데이터를 펼쳐 넣고
+            type: content.contentType, // 'Type' 대신 'type' 필드를 추가합니다. 인터페이스와 일치시킵니다.
+          }))
       );
-      
       // axios 호출 결과 처리
       const movieResponses = await Promise.all(moviePromises);
-      const movies = movieResponses.map(response => response.data);
-      setMovies(movies);
+      setMovies(movieResponses); // 응답 객체를 바로 사용합니다.
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-  
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -68,15 +74,18 @@ function MypageCon() {
   }
 
   const [showModal, setShowModal] = useState(false);
-  const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [selectedType, setSelectedType] = useState<string | "">("");
 
-  const openModal = (movieId: number) => {
-    setSelectedMovieId(movieId);
+  const openModal = (ContentId: number, ContentType: string) => {
+    setSelectedId(ContentId);
+    setSelectedType(ContentType);
     setShowModal(true);
   };
 
   const closeModal = () => {
-    setSelectedMovieId(null);
+    setSelectedId(null);
+    setSelectedType("");
     setShowModal(false);
   };
 
@@ -91,16 +100,16 @@ function MypageCon() {
           <div className="grid-container">
             {groupedMovies.map((group, index) => (
               <div key={index} className="grid-row">
-                {group.map((movie: IMovie) => (
+                {group.map((content: Content) => (
                   <div
-                    key={movie.id}
+                    key={content.id}
                     className="grid-item mb30 hoverAnimation"
-                    onClick={() => openModal(movie.id)}
+                    onClick={() => openModal(content.id, content.type)}
                     style={{ cursor: "pointer" }}
                   >
                     <img
-                      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                      alt={movie.title}
+                      src={`https://image.tmdb.org/t/p/w500${content.poster_path}`}
+                      alt={content.title}
                       className="grid-image"
                     />
                   </div>
@@ -109,15 +118,14 @@ function MypageCon() {
             ))}
           </div>
         </Tab>
-
       </Tabs>
-      {selectedMovieId && (
+      {selectedId && (
         <SelectContents
           showModal={showModal}
           setShowModal={setShowModal}
-          contentId={selectedMovieId}  // 여기에서 selectedMovieId를 사용하세요
-          contentType="movie"          // 영화에 대한 contentType이라고 가정합니다
           closeModal={closeModal}
+          contentType={selectedType}
+          contentId={selectedId}
         />
       )}
     </Container>

@@ -145,8 +145,12 @@ function MainHeader() {
         </Navbar.Brand>
         <Nav className="me-auto">
           <Nav.Link href="/" className="text-white">홈</Nav.Link>
-          <Link to='/SeriesComp'className="text-white nav-link">시리즈</Link>
-          <Link to='/MovieComp' className="text-white nav-link">영화</Link>
+          <NavLink to='/SeriesComp' className='nav-link' style={({isActive}) => (isActive ? { textDecoration: 'none', color: 'red', fontWeight: 'bold'}:{textDecoration: 'none', color: 'white'})}>
+          시리즈
+          </NavLink>          
+          <NavLink to='/MovieComp' className='nav-link' style={({isActive}) => (isActive ? { textDecoration: 'none', color: 'red', fontWeight: 'bold'}:{textDecoration: 'none', color: 'white'})}>
+            영화
+          </NavLink>
           {/* <Nav.Link href="/mypage" className="text-white">마이페이지</Nav.Link> */}
         </Nav>
 
