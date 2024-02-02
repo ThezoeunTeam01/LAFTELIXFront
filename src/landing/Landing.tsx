@@ -64,6 +64,15 @@ const Landing = () => {
                 </p>
               </Container>
               <FontAwesomeIcon icon={faAnglesDown} style={{color:`#fff`, fontSize: `30px`}} />
+
+              <div className="icon-container">
+                <FontAwesomeIcon
+                  icon={faAnglesDown}
+                  className="bounce-and-shine"
+                  style={{ color: '#fff', fontSize: '30px' }}
+                />
+              </div>
+
           </div>
 
           <div>
