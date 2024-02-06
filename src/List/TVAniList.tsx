@@ -30,7 +30,7 @@ const TVAniList: FC = () => {
   //컨텐츠별 변경 사항 시작 - 여기 부분만 수정하면 됩니다.
 
   // TV or movie에 따른 변경 부분 (movie/tv)
-  const contentType = "tv";
+  const contentType = "movie";
 
   // 상세 검색 목록 추가(&language=ko는 생략)
   // TV discover 자료 https://developer.themoviedb.org/reference/discover-tv
@@ -49,9 +49,8 @@ const TVAniList: FC = () => {
     setSelectedId(contentId);
     setShowModal(true);
   };
-  const closeModal = () => {
+  const resetModal = () => {
     setSelectedId(null);
-    setShowModal(false);
   };
   const [contents, setContents] = useState<content[]>([]);
 
@@ -170,8 +169,7 @@ const TVAniList: FC = () => {
       {selectedId && (
         <SelectContents
           showModal={showModal}
-          setShowModal={setShowModal}
-          closeModal={closeModal}
+          resetModal={resetModal}
           contentType={contentType}
           contentId={selectedId}
         />

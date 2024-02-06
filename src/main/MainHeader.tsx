@@ -8,6 +8,10 @@ import { useEffect, useRef, useState } from "react";
 
 import Login from '../member/Login'; // Login.js 파일을 import
 import Register from '../member/Register'; // Register.js 파일을 import
+
+//
+import MypageProfile from '../mypage/MypageProfile';
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell, faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom" 
@@ -27,7 +31,7 @@ function MainHeader() {
   const handleLoginClick = () => setLoginModalShow(true);
   const handleRegisterClick = () => setRegisterModalShow(true);
   // 로그인 페이지, 회원가입 페이지 불러오기 끝--
-
+  
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
@@ -143,8 +147,8 @@ function MainHeader() {
         <Navbar.Brand href="/">
           <img src={mainLogo} style={{ width: "100px" }} />
         </Navbar.Brand>
-        <Nav className="me-auto">
-          <Nav.Link href="/" className="text-white">홈</Nav.Link>
+        <Nav className="me-auto align-items-center">
+          <NavLink to='/' className="text-white text-decoration-none">홈</NavLink>
           <NavLink to='/SeriesComp' className='nav-link' style={({isActive}) => (isActive ? { textDecoration: 'none', color: 'red', fontWeight: 'bold'}:{textDecoration: 'none', color: 'white'})}>
           시리즈
           </NavLink>          

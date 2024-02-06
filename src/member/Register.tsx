@@ -20,7 +20,7 @@ type RegisterProps = {
   onHide: () => void;
 };
 
-// 헤더 버튼에 연결하기 위해 수정.
+// 헤더 버튼에 연결하기 위해 수정
 function Register({ show, onHide }: RegisterProps) {
   // modalShow를 showModalState로 변경
   const [showModalState, setShowModalState] = useState<boolean>(false);

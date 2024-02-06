@@ -22,8 +22,11 @@ interface LikeContents {
 }
 
 function MypageCon() {
-  const [movies, setMovies] = useState<Content[]>([]);
+  const [contents, setContents] = useState<Content[]>([]);
   const [likeContentList, setLikeContentList] = useState<LikeContents[]>([]);
+  const resetModal = () => {
+    setSelectedId(null);
+  };
 
   const userId = localStorage.getItem("userId");
 
@@ -37,16 +40,16 @@ function MypageCon() {
     }
 
     try {
-      const movieListResponse = await call("/like/likeRead", "POST", {
+      const contentListResponse = await call("/like/likeRead", "POST", {
         userId: userId,
       });
-      const movieList = movieListResponse.data;
+      const contentList = contentListResponse.data;
 
       // 상태 업데이트
-      setLikeContentList(movieList);
+      setLikeContentList(contentList);
 
       // 좋아요 영화 가져오기
-      const moviePromises = movieList.map((content: LikeContents) =>
+      const contentPromises = contentList.map((content: LikeContents) =>
         axios
           .get(
             `https://api.themoviedb.org/3/${content.contentType}/${content.contentId}?api_key=9c8709e24862b7b00803591402286323&language=ko-KR`
@@ -57,8 +60,8 @@ function MypageCon() {
           }))
       );
       // axios 호출 결과 처리
-      const movieResponses = await Promise.all(moviePromises);
-      setMovies(movieResponses); // 응답 객체를 바로 사용합니다.
+      const contentResponses = await Promise.all(contentPromises);
+      setContents(contentResponses); // 응답 객체를 바로 사용합니다.
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -68,9 +71,9 @@ function MypageCon() {
     fetchData();
   }, []);
   // 5개씩 묶어서 새로운 배열 생성
-  const groupedMovies = [];
-  for (let i = 0; i < movies.length; i += 5) {
-    groupedMovies.push(movies.slice(i, i + 5));
+  const groupedContents = [];
+  for (let i = 0; i < contents.length; i += 5) {
+    groupedContents.push(contents.slice(i, i + 5));
   }
 
   const [showModal, setShowModal] = useState(false);
@@ -83,12 +86,6 @@ function MypageCon() {
     setShowModal(true);
   };
 
-  const closeModal = () => {
-    setSelectedId(null);
-    setSelectedType("");
-    setShowModal(false);
-  };
-
   return (
     <Container>
       <Tabs
@@ -98,7 +95,7 @@ function MypageCon() {
       >
         <Tab eventKey="like" title="찜 리스트">
           <div className="grid-container">
-            {groupedMovies.map((group, index) => (
+            {groupedContents.map((group, index) => (
               <div key={index} className="grid-row">
                 {group.map((content: Content) => (
                   <div
@@ -122,8 +119,7 @@ function MypageCon() {
       {selectedId && (
         <SelectContents
           showModal={showModal}
-          setShowModal={setShowModal}
-          closeModal={closeModal}
+          resetModal={resetModal}
           contentType={selectedType}
           contentId={selectedId}
         />

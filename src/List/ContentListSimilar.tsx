@@ -11,14 +11,15 @@ import {
 } from "react-bootstrap";
 // sass 파일
 import "../style/custom.scss";
-import SelectContents from "./SelectContents";
 import {
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import SelectContents from "./SelectContents";
+import internal from "stream";
 
-interface IContent {
+interface Content {
   id: number;
   backdrop_path: string;
   title: string;
@@ -28,36 +29,37 @@ interface IContent {
 interface SelectContentsProps {
   contentType: string;
   contentId: number;
+  setModalContentType: React.Dispatch<React.SetStateAction<string>>;
+  setModalContentId: React.Dispatch<React.SetStateAction<number>>;
+  // closeModal: () => void;
+  // setModalControll: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ContentListSimilar: FC<SelectContentsProps> = (contentProps) => {
+function ContentListSimilar({
+  contentId,
+  contentType,
+  setModalContentId,
+  setModalContentType,
+}: SelectContentsProps) {
+  //모달 관련
+  const [selectedId, setSelectedId] = useState<number | null>(null);
   const [showModal, setShowModal] = useState(false);
-  const [selectedContentId, setSelectedContentId] = useState<number | null>(
-    null
-  );
+
   const openModal = (contentId: number) => {
-    setSelectedContentId(contentId);
-    setShowModal(true);
+    setModalContentId(contentId);
+    setModalContentType(contentType);
   };
 
-  const closeModal = () => {
-    setSelectedContentId(null);
-    setShowModal(false);
-  };
-
-  const [contents, setContents] = useState<IContent[]>([]);
-  const [userId, setUserId] = useState<string | null>(
-    localStorage.getItem("userId")
-  );
+  const [contents, setContents] = useState<Content[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://api.themoviedb.org/3/${contentProps.contentType}/${contentProps.contentId}/similar?api_key=9c8709e24862b7b00803591402286323&language=ko-KR&with_watch_providers=8`
+          `https://api.themoviedb.org/3/${contentType}/${contentId}/similar?api_key=9c8709e24862b7b00803591402286323&language=ko-KR&with_watch_providers=8`
         );
         const contentsWithLikeStatus = response.data.results.map(
-          (content: IContent) => ({
+          (content: Content) => ({
             ...content,
           })
         );
@@ -68,7 +70,7 @@ const ContentListSimilar: FC<SelectContentsProps> = (contentProps) => {
     };
 
     fetchData();
-  }, []);
+  }, [contentId, contentType]);
 
   // 3개씩 묶어서 새로운 배열 생성
   const groupedContents = [];
@@ -105,7 +107,7 @@ const ContentListSimilar: FC<SelectContentsProps> = (contentProps) => {
           {groupedContents.map((group, index) => (
             <CarouselItem key={index} className="pt20">
               <Row>
-                {group.map((content: IContent) => (
+                {group.map((content: Content) => (
                   <Col
                     key={content.id}
                     className="hoverAnimation"
@@ -164,17 +166,8 @@ const ContentListSimilar: FC<SelectContentsProps> = (contentProps) => {
           </Button>
         </div>
       </div>
-      {/* {selectedContentId && (
-        <SelectContents
-          showModal={showModal}
-          setShowModal={setShowModal}
-          // contentId={contentId}
-          // contentType={contentType}
-          closeModal={closeModal}
-        />
-      )} */}
     </Container>
   );
-};
+}
 
 export default ContentListSimilar;

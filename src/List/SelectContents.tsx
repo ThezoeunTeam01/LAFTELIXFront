@@ -21,12 +21,13 @@ import "../style/custom.scss";
 import ContentListSimilar from "./ContentListSimilar";
 
 // 로딩바 추가
-import loadingBar from "../image/loadingBar.svg";
+import loadingBar from "../image/loading/loadingBar.svg";
 
 interface SelectContents {
   contentId: number;
   contentType: string;
   backdrop_path: string;
+  name: string;
   title: string;
   overview: string;
   likeStatus?: boolean;
@@ -53,10 +54,9 @@ type ReplyInfo = {
 
 interface SelectContentsProps {
   showModal: boolean;
-  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
   contentId: number;
   contentType: string;
-  closeModal: () => void; // 새로운 함수 추가
+  resetModal: () => void;
 }
 interface LikeButton {
   isLiked: boolean;
@@ -64,11 +64,18 @@ interface LikeButton {
 
 function SelectContents({
   showModal,
-  setShowModal,
   contentId,
   contentType, // 매개변수 이름 변경
-  closeModal,
+  resetModal,
 }: SelectContentsProps) {
+  //모달 상태 관리
+  const [modalControll, setModalControll] = useState(showModal);
+  const [modalContentId, setModalContentId] = useState(contentId);
+  const [modalContentType, setModalContentType] = useState(contentType);
+  const closeModal = () => {
+    setModalControll(false);
+    resetModal();
+  };
   // 찜버튼 로그인 이벤트
   const [show, setShow] = useState(false);
   const target = useRef(null);
@@ -91,8 +98,8 @@ function SelectContents({
         if (accessToken != null) {
           const likeMoviesPromise = call("/like/likeReadButton", "POST", {
             userId: userId,
-            contentId: contentId,
-            contentType: contentType,
+            contentId: modalContentId,
+            contentType: modalContentType,
           });
           const likeMovies = await likeMoviesPromise;
           console.log("likeMovies:", likeMovies);
@@ -107,10 +114,15 @@ function SelectContents({
             setHeartColor(false);
           }
         }
-        const response = await axios.get(
-          `https://api.themoviedb.org/3/${contentType}/${contentId}?api_key=9c8709e24862b7b00803591402286323&language=ko-KR`
+        const contentResponse = await axios.get(
+          `https://api.themoviedb.org/3/${modalContentType}/${modalContentId}?api_key=9c8709e24862b7b00803591402286323&language=ko-KR`
         );
-        setContents(response.data);
+        setContents(contentResponse.data);
+        const response = await call(
+          `/reply?contentType=${modalContentType}&contentId=${modalContentId}`,
+          "GET"
+        );
+        setReplyInfos(response);
         // API 호출 후에 데이터 설정 및 로딩 상태를 false로 설정
         setLoading(false);
       } catch (error) {
@@ -118,7 +130,7 @@ function SelectContents({
       }
     };
     fetchData();
-  }, [contentId]);
+  }, [modalContentId, modalContentType]);
   // 사용자 찜 목록을 가져오는 함수
 
   // 컴포넌트가 마운트될 때 찜 목록을 가져오는 effect
@@ -146,8 +158,8 @@ function SelectContents({
         if (isLiked) {
           const response = call("/like/likeDelete", "POST", {
             userId: userId,
-            contentId: contentId,
-            contentType: contentType,
+            contentId: modalContentId,
+            contentType: modalContentType,
           });
           setIsLiked(false);
           // 하트 이모티콘 클릭 시 하트 이모티콘 색상 없음
@@ -156,8 +168,8 @@ function SelectContents({
         } else {
           const response = call("/like/likeCreate", "POST", {
             userId: userId,
-            contentId: contentId,
-            contentType: contentType,
+            contentId: modalContentId,
+            contentType: modalContentType,
           });
           setIsLiked(true);
           // 하트 이모티콘 클릭 시 하트 이모티콘 색상 추가
@@ -178,15 +190,10 @@ function SelectContents({
 
   const fetchData = async () => {
     // ID만 들어감 타입도 넣어줘야함
-    const response = await call(
-      `/reply?contentType=${contentType}&contentId=${contentId}`,
-      "GET"
-    );
-    setReplyInfos(response);
   };
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [modalContentId, modalContentType]);
 
   // 댓글 등록
   const replySubmit = async (replyInfo: ReplyInfo) => {
@@ -215,16 +222,12 @@ function SelectContents({
     setReplyInfos(response);
   };
 
-  // 모달 닫기 버튼 추가
-  const closeModal1 = () => {
-    setShowModal(false);
-  };
+  //**************************모달 관련**********************
 
   return (
     <div>
       <Modal
-        show={showModal}
-        onHide={closeModal}
+        show={modalControll}
         size="xl"
         dialogClassName="modal-90w"
         aria-labelledby="contained-modal-title-vcenter"
@@ -232,7 +235,7 @@ function SelectContents({
       >
         <Modal.Header className="bgColorBk borderTrans pd30 position-relative">
           <Button
-            onClick={closeModal1}
+            onClick={closeModal}
             className="backTrans borderTrans position-absolute top-50 end-0 translate-middle-y"
           >
             <FontAwesomeIcon
@@ -280,6 +283,7 @@ function SelectContents({
                         <div className="d-flex align-items-center">
                           <div>
                             <h2 className="fs-3 text-white fw-bold mb-4">
+                              {contents.name}
                               {contents.title}
                             </h2>
                             <h3
@@ -385,7 +389,7 @@ function SelectContents({
                         <img
                           className="rounded"
                           src={`https://image.tmdb.org/t/p/w300${contents.poster_path}`}
-                          alt={contents.title}
+                          alt={`${contents.name} ${contents.title}`}
                           style={{ height: "100%" }}
                         />
                       </Col>
@@ -406,29 +410,29 @@ function SelectContents({
               {/* 리플 영역 */}
               <Reply
                 username={username}
-                contentId={contentId}
-                contentType={contentType}
+                contentId={modalContentId}
+                contentType={modalContentType}
                 img={img}
                 replySubmit={replySubmit}
               />
               <ListGroup>
                 {replyInfos &&
                   replyInfos.map((replyInfo) => (
-                    <ShowReply
-                      updateReplyInfos={updateReplyInfos}
-                      deleteReplyInfos={deleteReplyInfos}
-                      replyInfo={replyInfo}
-                      key={replyInfo.rno}
-                    />
+                      <ShowReply
+                        updateReplyInfo={updateReplyInfos}
+                        deleteReplyInfo={deleteReplyInfos}
+                        replyInfo={replyInfo}
+                      />
                   ))}
               </ListGroup>
             </Tab>
             <Tab eventKey="home" title="비슷한 콘텐츠">
               <div className="pd30">
-                {" "}
                 <ContentListSimilar
-                  contentType={contentType}
-                  contentId={contentId}
+                  contentType={modalContentType}
+                  contentId={modalContentId}
+                  setModalContentId={setModalContentId}
+                  setModalContentType={setModalContentType}
                 />
               </div>
             </Tab>

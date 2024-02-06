@@ -1,9 +1,9 @@
 import React, { ChangeEvent, useState } from "react";
-import { Button, Form, Image, ListGroupItem } from "react-bootstrap";
+import { Button, Form, FormText, Image, ListGroupItem } from "react-bootstrap";
 import { call } from "../service/ApiService";
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import { faEllipsisVertical, faPencil, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faEllipsisVertical, faPencil, faTrashCan, faHeart, faThumbsUp, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 type ReplyInfo = {
@@ -17,11 +17,11 @@ type ReplyInfo = {
 
 type ShowReplyProps = {
   replyInfo:ReplyInfo;
-  updateReplyInfos:(replyInfo:ReplyInfo) => void;
-  deleteReplyInfos:(rno:number) => void;
+  updateReplyInfo:(replyInfo:ReplyInfo) => void;
+  deleteReplyInfo:(rno:number) => void;
 }
 
-function ShowReply({replyInfo, updateReplyInfos, deleteReplyInfos}:ShowReplyProps) {
+function ShowReply({replyInfo, updateReplyInfo, deleteReplyInfo}:ShowReplyProps) {
 
   // 댓글 수정
   const [updateContent,setUpdateContent] = useState(replyInfo);
@@ -45,7 +45,7 @@ function ShowReply({replyInfo, updateReplyInfos, deleteReplyInfos}:ShowReplyProp
       console.log(updateContent);
       setButton("수정");
       setIsReadOnly(!isReadOnly);
-      updateReplyInfos(updateContent);
+      updateReplyInfo(updateContent);
     }
     
   }
@@ -59,18 +59,41 @@ function ShowReply({replyInfo, updateReplyInfos, deleteReplyInfos}:ShowReplyProp
   // 삭제 버튼
   const deleteButton = (e:React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    deleteReplyInfos(replyInfo.rno);
+    deleteReplyInfo(replyInfo.rno);
+  }
+
+  // 댓글 좋아요
+  const token = localStorage.getItem("ACCESS_TOKEN");
+  const [replyLikeColor, setReplyLikeColor] = useState(false);
+  const replyLikeButton = (e:React.MouseEvent<HTMLButtonElement>) => {
+    if(token !== null){
+      setReplyLikeColor(!replyLikeColor);
+    }else {   
+      alert("로그인 해주세요");
+    }
   }
 
   return(
       <Form className="pd30 border-bottom border-dark">        
-        <Row> 
+        <Row className="align-items-center mb-2"> 
+          {/* 여기에 별점 표시 추가 */}
+
+          {/* 별점 누르면 하위 컴포넌트 사라지는 이슈 있음 - 수정 요청 필요함. */}
           <Col className="">
             <Form.Group controlId="content">
               <Form.Label>
-                <div className="d-flex gap-2">
-                  <Image src={`/image/${replyInfo.img}`} alt="img" className="rounded float-start" style={{width:`30px`, height:`30px`}}/>
-                  <p className="text-white fw-bold">{replyInfo.username}</p>
+                <div className="d-flex gap-2 text-white align-items-center">
+                  별점 표시 위치 <FontAwesomeIcon icon={faStar} /> <FontAwesomeIcon icon={faStar} /> <FontAwesomeIcon icon={faStar} /> <FontAwesomeIcon icon={faStar} /> <FontAwesomeIcon icon={faStar} />
+                </div>
+              </Form.Label>
+            </Form.Group>
+          </Col>
+          <Col className="d-flex gap-2 justify-content-end align-items-center">
+            <Form.Group controlId="content">
+              <Form.Label>
+                <div className="d-flex gap-2 align-items-center">
+                  <span className="text-white fw-bold">{replyInfo.username}</span>
+                  <Image src={`/image/${replyInfo.img}`} alt="img" className="rounded float-start" style={{width:`25px`, height:`25px`}}/>
                 </div>
               </Form.Label>
             </Form.Group>
@@ -92,7 +115,23 @@ function ShowReply({replyInfo, updateReplyInfos, deleteReplyInfos}:ShowReplyProp
               <Button type="button" value="삭제" onClick={deleteButton} className="btn btn-secondary">
                 <FontAwesomeIcon icon={faTrashCan} />
               </Button>
-            </Form.Group>
+            </Form.Group>            
+          </Col>
+        </Row>
+        <Row>
+          <Col className="d-flex col gap-2 justify-content-start align-items-center">
+          {/* 댓글 좋아요 버튼 */}
+          <Form.Group controlId="submit">
+            <span onClick={replyLikeButton} style={{ cursor: `pointer` }}>
+              {/* <FontAwesomeIcon icon={faHeart} color={replyLikeColor ? "red":"black"}  /> */}
+              <FontAwesomeIcon icon={faThumbsUp} color={replyLikeColor ? "white":"gray"}/>
+            </span>
+          </Form.Group>
+          <Form.Group controlId="content">
+            <FormText className="text-white">
+              1
+            </FormText>
+          </Form.Group>
           </Col>
         </Row>
     </Form>
