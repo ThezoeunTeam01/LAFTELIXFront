@@ -63,6 +63,7 @@ function ShowReply({replyInfo, updateReplyInfos, deleteReplyInfos}:ShowReplyProp
   }
 
   // 댓글 좋아요
+  const username = localStorage.getItem("username");
   const token = localStorage.getItem("ACCESS_TOKEN");
   const [replyLikeColor, setReplyLikeColor] = useState(false);
   const replyLikeButton = async (e:React.MouseEvent<HTMLButtonElement>) => {
@@ -72,13 +73,13 @@ function ShowReply({replyInfo, updateReplyInfos, deleteReplyInfos}:ShowReplyProp
         const response = await call("/reply/likeCreate","POST",{contentType: replyInfo.contentType,
                                                                 contentId: replyInfo.contentId,
                                                                 rno:replyInfo.rno,
-                                                                username:replyInfo.username});
+                                                                username:username});
         console.log(response);
       }else {
         await call("/reply/likeDelete","DELETE",{contentType: replyInfo.contentType,
                                                 contentId: replyInfo.contentId,
                                                 rno:replyInfo.rno,
-                                                username:replyInfo.username});
+                                                username:username});
       }
       setReplyLikeColor(!replyLikeColor);
     } else {   
@@ -88,10 +89,12 @@ function ShowReply({replyInfo, updateReplyInfos, deleteReplyInfos}:ShowReplyProp
   const [likeCount, setLikeCount] = useState(0);
   useEffect(() => {
     const likeStatus = async () => {
-      const response = await call(`/reply/likeList?contentType=${replyInfo.contentType}&contentId=${replyInfo.contentId}&rno=${replyInfo.rno}&username=${replyInfo.username}`,"GET");
+      const response = await call(`/reply/likeList?contentType=${replyInfo.contentType}&contentId=${replyInfo.contentId}&rno=${replyInfo.rno}&username=${username}`,"GET");
       if(response.status === 0) {
+        console.log("1번이냐");
         setReplyLikeColor(false);
       }else {
+        console.log("2번이냐");
         setReplyLikeColor(true);
       }
     }
