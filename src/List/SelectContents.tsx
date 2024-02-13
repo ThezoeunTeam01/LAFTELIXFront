@@ -428,6 +428,7 @@ function SelectContents({
                 {replyInfos &&
                   replyInfos.map((replyInfo) => (
                       <ShowReply
+                        key={replyInfo.rno}
                         updateReplyInfos={updateReplyInfos}
                         deleteReplyInfos={deleteReplyInfos}
                         replyInfo={replyInfo}

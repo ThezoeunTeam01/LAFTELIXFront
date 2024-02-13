@@ -75,34 +75,34 @@ function ShowReply({replyInfo, updateReplyInfos, deleteReplyInfos}:ShowReplyProp
                                                                 username:replyInfo.username});
         console.log(response);
       }else {
-        const response = await call("/reply/likeDelete","POST",{contentType: replyInfo.contentType,
-                                                                contentId: replyInfo.contentId,
-                                                                rno:replyInfo.rno,
-                                                                username:replyInfo.username});
+        await call("/reply/likeDelete","DELETE",{contentType: replyInfo.contentType,
+                                                contentId: replyInfo.contentId,
+                                                rno:replyInfo.rno,
+                                                username:replyInfo.username});
       }
       setReplyLikeColor(!replyLikeColor);
     } else {   
       alert("로그인 해주세요");
     }
   }
+  const [likeCount, setLikeCount] = useState(0);
   useEffect(() => {
-    console.log("여기 들어와?");
-    const fetch = async () => {
-      const response = await call("/reply/likeList","POST",{contentType: replyInfo.contentType,
-                                                              contentId: replyInfo.contentId,
-                                                              rno:replyInfo.rno,
-                                                              username:replyInfo.username});
-      console.log(response.status);
-      if(response.status === "exist") {
-        console.log("눌려있네");
-        setReplyLikeColor(true);
-      }else {
-        console.log("안눌려있어?");
+    const likeStatus = async () => {
+      const response = await call(`/reply/likeList?contentType=${replyInfo.contentType}&contentId=${replyInfo.contentId}&rno=${replyInfo.rno}&username=${replyInfo.username}`,"GET");
+      if(response.status === 0) {
         setReplyLikeColor(false);
+      }else {
+        setReplyLikeColor(true);
       }
     }
-    fetch();
-  },[])
+    likeStatus();
+
+    const likeCount = async () => {
+      const response = await call(`/reply/likeCount?contentType=${replyInfo.contentType}&contentId=${replyInfo.contentId}&rno=${replyInfo.rno}`,"GET");
+      setLikeCount(response.count);
+    }
+    likeCount();
+  },[replyLikeColor])
 
 
   return(
@@ -161,7 +161,7 @@ function ShowReply({replyInfo, updateReplyInfos, deleteReplyInfos}:ShowReplyProp
           </Form.Group>
           <Form.Group controlId="content">
             <FormText className="text-white">
-              1
+              {likeCount}
             </FormText>
           </Form.Group>
           </Col>
