@@ -10,6 +10,8 @@ import Landing from './landing/Landing';
 import LandingBanner from './landing/LandingBanner';
 import SeriesComp from './List/SeriesComp';
 import MovieComp from './List/MovieComp';
+import TopButton from './main/TopButton';
+//import Top from './main/Top';
 
 function App() {  
   return (
@@ -21,28 +23,33 @@ function App() {
               <MainHeader />
               <MainSlide />
               <TVAniList />
-              <LandingBanner />
+              <TopButton />
               <MainFooter />
             </div>
           }/>
           <Route path="/myPage" element={
-          <div>
-              <MainHeader />
-              <MypageProfile />
-              <MypageCon />
-              <MainFooter />
-          </div>
+            <div>
+                <MainHeader />
+                <MypageProfile />
+                <MypageCon />
+                <TopButton />
+                <MainFooter />
+            </div>
           } />
           <Route path="/SeriesComp" element={
             <div>
               <MainHeader />
               <SeriesComp />
+              <TopButton />
+              <MainFooter />
             </div>
           } />
           <Route path="/MovieComp" element={
             <div>
               <MainHeader />
               <MovieComp />
+              <TopButton />
+              <MainFooter />
             </div>
           } />          
           <Route path="/landing" element={

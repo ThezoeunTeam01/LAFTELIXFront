@@ -12,6 +12,17 @@ import landing02 from "../image/landing/landing02.png";
 import landing02_2 from "../image/landing/landing02_2.png";
 import landing03 from "../image/landing/landing03.png";
 import landing03_2 from "../image/landing/landing03_2.png";
+// 브랜드 로고
+import logoIcon1 from "../image/landing/logoicon1.png";
+import logoIcon2 from "../image/landing/logoicon2.png";
+import logoIcon3 from "../image/landing/logoicon3.png";
+import logoIcon4 from "../image/landing/logoicon4.png";
+import logoIcon5 from "../image/landing/logoicon5.png";
+import logoIcon6 from "../image/landing/logoicon6.png";
+import logoIcon7 from "../image/landing/logoicon7.png";
+import logoIcon8 from "../image/landing/logoicon8.png";
+
+
 // scss, css 
 import '../style/custom.scss';
 // AOS Animation
@@ -42,13 +53,13 @@ const Landing = () => {
   <>       
     <section className="scrollContentBoxMain">
       <Container>
-        <div data-aos="fade-up" className="d-flex align-items-center justify-content-center">
+        <div data-aos="fade-up" className="d-flex align-items-center justify-content-center" style={{ flexDirection: `row` }}>
           <img src={mainLogo} style={{ width: '300px' }} alt="laftelix_logo"  />
           <FontAwesomeIcon icon={faXmark} style={{ color: '#fff', fontSize: '30px' }} />
           <img src={linkedLogo} style={{ width: '300px' }} alt="linked_logo" />
         </div>
         <p data-aos="fade-up" className="text-white landingMainText">
-          국내최대 소통 커뮤니티 '라프텔릭스'와 고객 평점 1위 구독 플랫폼 '링키드'의 만남으로
+          국내 최대 소통 커뮤니티 '라프텔릭스'와 고객 평점 1위 구독 플랫폼 '링키드'의 만남으로
           구독 정보부터 구독 할인까지 한 번에!!!
         </p>
       </Container>
@@ -67,26 +78,58 @@ const Landing = () => {
     </section>
 
     <section className="scrollContentBox">
-      <Container className="d-flex align-items-center justify-content-around">
+      <Container className="d-flex align-items-center justify-content-around" style={{ flexDirection: `row` }}>
         <div className="text-white">
           <h3 data-aos="fade-up" className="landingContTitle"> 
             이봐, 나의 동료가 되지 않겠는가?
           </h3>
           <p data-aos="fade-up" className="landingContText">
             파티장이 되어 파티원을 모집해보세요. <br />
-            국내최대 커뮤니티 라프텔릭스에서 구성원을 찾으면 파티가 더 쉽게 구성될 수 있습니다.
+            국내 최대 커뮤니티 '라프텔릭스'에서 구성원을 찾으면 파티가 더 쉽게 구성될 수 있습니다.
           </p>
         </div>
         <div>
-          <img src={landing01} alt="landing01" style={{ width: "300px" }} data-aos="fade-up" />
+          <img src={landing02} alt="landing01" style={{ width: "300px" }} data-aos="fade-up" />
+        </div>
+      </Container>
+    </section>    
+
+    <section className="scrollContentBox">
+      <Container className="d-flex align-items-center justify-content-around" style={{ flexDirection: `row` }}>
+        <div className="d-flex" data-aos="fade-up">
+          <div data-aos="fade-up" style={{width: `300px`, gridTemplateColumns: `1fr 1fr 1fr`, flexDirection: `row`, padding: `10px` , gap: `15px`}} className="d-flex harvey">
+            <img src={logoIcon1} alt="landing01" />
+            <img src={logoIcon2} alt="landing01" />
+            <img src={logoIcon3} alt="landing01" />
+          </div>          
+          <div data-aos="fade-up" style={{width: `300px`, gridTemplateColumns: `1fr 1fr 1fr`, flexDirection: `row`, padding: `10px` , gap: `15px` }} className="d-flex harvey">
+            <img src={logoIcon4} alt="landing01" />
+            <img src={logoIcon5} alt="landing01" />
+            <img src={logoIcon6} alt="landing01" />
+          </div>
+          <div data-aos="fade-up" style={{width: `300px`, gridTemplateColumns: `1fr 1fr 1fr` , flexDirection: `row`, padding: `10px` , gap: `15px` }} className="d-flex harvey">          
+            <img src={logoIcon7} alt="landing01" />
+            <img src={logoIcon8} alt="landing01" />
+          </div>
+        </div>
+        <div className="text-white">
+          <h3 data-aos="fade-up" className="landingContTitle"> 
+            보고싶은 OTT는 여러 개인데 , <br /> 구독 사이트마다 가입해서 사용하시기 <br />
+            부담스러우셨죠? 
+          </h3>
+          <p data-aos="fade-up" className="landingContText">
+            1-3인으로 이뤄진 파티를 구성해서 구독료를 '확' 낮추세요!! <br />
+            넷플릭스 구독료 19,000원 기준 2인이 파티를 구성할 경우 1인 9,000원으로 구독이
+            가능합니다!
+          </p>
         </div>
       </Container>
     </section>
 
     <section className="scrollContentBox">
-      <Container className="d-flex align-items-center justify-content-around">
+      <Container className="d-flex align-items-center justify-content-around" style={{ flexDirection: `row` }}>
         <div>
-          <img src={landing02} alt="landing02" style={{ width: "300px" }} data-aos="fade-up" />
+          <img src={landing01} alt="landing02" style={{ width: "300px" }} data-aos="fade-up" />
         </div>
         <div className="text-white">
           <h3 data-aos="fade-up" className="landingContTitle"> 
@@ -102,7 +145,7 @@ const Landing = () => {
     </section>
 
     <section className="scrollContentBox">
-      <Container className="d-flex align-items-center justify-content-around">
+      <Container className="d-flex align-items-center justify-content-around" style={{ flexDirection: `row` }}>
         <div className="text-white">
           <h3 data-aos="fade-up" className="landingContTitle"> 
             보안 문제가 걱정이라면?

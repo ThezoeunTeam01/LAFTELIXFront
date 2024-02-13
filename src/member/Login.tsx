@@ -1,8 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, Container, Form, Modal, Overlay, Tooltip } from "react-bootstrap";
 import { signin } from "../service/ApiService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import SocialKaKao from "./SocialKakao";
+
 
 type LoginProps = {
   show: boolean;
@@ -46,7 +48,7 @@ function Login({ show, onHide }: LoginProps) {
   const login = async () => {
     const response = await signin(loginInfo);
     if(response === "login_fail") {
-      setLoginShow(!loginShow);
+      ;
     }
   }
 
@@ -85,14 +87,10 @@ function Login({ show, onHide }: LoginProps) {
                 </Tooltip>
               )}
             </Overlay>
-                  </Form.Group>
-          </Form>
 
-          {/* 소셜 로그인 */}
-          {/* <div className="d-flex align-items-center justify-content-center gap-2">
-            <Button as="input" type="button" value="" style={{width:`40px`}}> 네이버 </Button>
-            <Button as="input" type="button" value="" style={{width:`40px`}}> 카카오 </Button>
-          </div> */}
+            <SocialKaKao />
+          </Form.Group>
+          </Form>
 
         </Modal.Body>
  

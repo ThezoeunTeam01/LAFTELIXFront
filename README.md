@@ -4,7 +4,7 @@
 프로젝트 깃허브 레퍼지토리에는 node module이 업로드 되어 있지 않기 때문에 
 git clone 진행 후 node module 설치를 위해 반드시 npm install 실행할 것!
 
-# 추가 npm install 
+# 추가 설치된 npm install 
 
 - 폰트어썸 - svg 아이콘 
 
@@ -17,6 +17,15 @@ npm install --save @fortawesome/react-fontawesome
 사용 상세 : (https://react-bootstrap.netlify.app/)
 
 npm install react-bootstrap bootstrap
+
+- AOS 애니메이션
+
+npm i --save-dev @types/aos
+
+# 설치된 리스트 확인 명령어
+
+npm list
+
 
 # 작업자 A가 install 했던 내역은 다른 작업자들이 pull받은 후 npm install하면 전부 자동 적용됩니다.
 

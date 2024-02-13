@@ -82,11 +82,11 @@ function Reply({username, contentType, contentId, img, replySubmit}:ReplyProps) 
       }
 
       // 업데이트된 starRating 값을 가지고 replySubmit을 호출
-      const score = newStarClicked.filter(Boolean).length;
-      replySubmit({
-        ...replyInfo,
-        starRating: score,
-      });
+      // const score = newStarClicked.filter(Boolean).length;
+      // replySubmit({
+      //   ...replyInfo,
+      //   starRating: score,
+      // });
 
       return newStarClicked;
     });
@@ -143,11 +143,11 @@ function Reply({username, contentType, contentId, img, replySubmit}:ReplyProps) 
   return(
     <Form className="pd30 border-bottom border-2 border-dark">
       <h4 className="text-white fs-5 mb30 fw-bold">리뷰 작성하기</h4>
-      <Row>
+      <Row className="mb-2">
         <Col className={styles.Wrap}>
           <h1 className={styles.RatingText}>내 별점</h1>
-          <div className="d-flex flex-column">
-            <span className="text-white ">5.0</span>
+          <div className="d-flex flex-column align-items-center">
+            <span className="text-white fs-3">5.0</span>
             <div className={styles.Stars}>
               {ARRAY.map((el, idx) => {
                 return (
@@ -171,8 +171,8 @@ function Reply({username, contentType, contentId, img, replySubmit}:ReplyProps) 
 
         <Col className={styles.Wrap}>
           <h1 className={styles.RatingText}>평균 별점</h1>
-          <div className="d-flex flex-column">
-            <span className="text-white ">5.0</span>
+          <div className="d-flex flex-column align-items-center">
+            <span className="text-white fs-3">5.0</span>
             <div className={styles.Stars}>
               {ARRAY.map((el, idx) => {
                 return (
@@ -194,17 +194,18 @@ function Reply({username, contentType, contentId, img, replySubmit}:ReplyProps) 
           </div>
         </Col>
 
-        <Col xs={10} className="">
-          <Form.Group controlId="username">
-            <Form.Control type="text" maxLength={200} placeholder="작품에 대한 평가를 남겨주세요!" value={replyInfo.reply} onChange={inputChange} onKeyDown={onEnter} className="replyInput" />
-          </Form.Group>
+        <Col>
         </Col>
+      </Row>
+
+        <Row>
         <Col className="">
-        <Form.Group controlId="submit">
-          <Button type="button" value="등록" onClick={onClick} className="w-100">
-            <FontAwesomeIcon icon={faPenToSquare} />
-          </Button>
-        </Form.Group>
+          <Form.Group controlId="username" className="position-relative ">
+            <Form.Control type="text" maxLength={200} placeholder="작품에 대한 평가를 남겨주세요!" value={replyInfo.reply} onChange={inputChange} onKeyDown={onEnter} className="replyInput" style={{padding: `20px`}}/>
+            <Button type="button" value="등록" onClick={onClick} className="w-2 position-absolute top-50 translate-middle-y" style={{right: `10px`}}>
+              <FontAwesomeIcon icon={faPenToSquare} />
+            </Button>
+          </Form.Group>
         </Col>
       </Row>
       <div>

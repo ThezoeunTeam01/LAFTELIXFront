@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Button, ButtonGroup, Form, Image, Modal, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
+import { Button, ButtonGroup, Col, Form, Image, Modal, Row, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { call } from "../service/ApiService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { calculateNewValue } from "@testing-library/user-event/dist/utils";
 
 type UserInfo = {
   username:string;
@@ -20,7 +21,7 @@ type RegisterProps = {
   onHide: () => void;
 };
 
-// 헤더 버튼에 연결하기 위해 수정
+// 헤더 버튼에 연결하기 위해 수정.
 function Register({ show, onHide }: RegisterProps) {
   // modalShow를 showModalState로 변경
   const [showModalState, setShowModalState] = useState<boolean>(false);
@@ -192,6 +193,15 @@ function Register({ show, onHide }: RegisterProps) {
       
     }
   };
+  // 중복 확인 버튼
+  const doubleCheck = async(e:React.MouseEvent<HTMLButtonElement>) => {
+    const response = await call(`/member/doubleCheck?username=${userInfo.username}`,"GET");
+    if(response.status=="possible"){
+      alert("사용가능");
+    }else{
+      alert("중복되었습니다.");
+    }
+  }
 
   return (
     // <div
@@ -208,10 +218,18 @@ function Register({ show, onHide }: RegisterProps) {
           <Form>
             <Form.Group className="mb30" controlId="username">
               <Form.Label>아이디</Form.Label>
-              <Form.Control type="text"  maxLength={20} name="username" placeholder="아이디 입력" value={userInfo.username} onChange={inputChange} className="customInput" />
-              <span>{count}</span>
-                /20자
+              <Row>
+                <Col sm={9}>
+                <div className="position-relative">
+                  <Form.Control type="text"  maxLength={20} name="username" placeholder="아이디 입력" value={userInfo.username} onChange={inputChange} className="customInput" />
+                  <span className="position-absolute top-50 end-0 translate-middle">{count}/20자</span>
+                </div>
                 {<p className={passwordLimit.test(userInfo.password) ? 'text-success' : 'text-danger'}>{idLength}</p>}
+                </Col>
+                <Col sm={3}>
+                  <Button onClick={doubleCheck}>중복확인</Button>
+                </Col>
+              </Row>
             </Form.Group>
             
             <Form.Group className="mb30" controlId="password">
@@ -223,11 +241,16 @@ function Register({ show, onHide }: RegisterProps) {
 
             <Form.Group className="mb30" controlId="passwordCheck">
               <Form.Label>비밀번호 확인</Form.Label>
-              <Form.Control type="password" name="passwordCheck" placeholder="비밀번호 확인" value={userInfo.passwordCheck} onChange={inputChange} className="customInput" />
-              <br />
-              <Button className="btn btn-dark position-absolute top-30 end-0 translate-middle-y" onClick={passwordConfirm}>확인</Button>
-              {/* 비밀번호 일치 여부에 따른 메세지 출력 */}
-              {buttonClicked && (<p className={passwordsMatch ? 'text-success' : 'text-danger'}>{passwordCheckMessage}</p>)}
+              <Row>
+                <Col sm={9}>
+                  <Form.Control type="password" name="passwordCheck" placeholder="비밀번호 확인" value={userInfo.passwordCheck} onChange={inputChange} className="customInput" />
+                  {/* 비밀번호 일치 여부에 따른 메세지 출력 */}
+                  {buttonClicked && (<p className={passwordsMatch ? 'text-success' : 'text-danger'}>{passwordCheckMessage}</p>)}                  
+                </Col>
+                <Col sm={3}>
+                  <Button className="btn btn-dark" onClick={passwordConfirm}>확인</Button>
+                </Col>
+              </Row>
             </Form.Group>
             
             <Form.Group className="mb-3" controlId="gender">
@@ -277,14 +300,14 @@ function Register({ show, onHide }: RegisterProps) {
 
             <Form.Group className="mb-3" controlId="img">
               <Form.Label>이미지</Form.Label>
-              <ToggleButtonGroup type="radio" name="options" defaultValue={1}>
-                <ToggleButton id="tbg-radio-1" value={1}>
+              <ToggleButtonGroup type="radio" name="options" defaultValue={1} className="gap-3">
+                <ToggleButton id="tbg-radio-1" value={1} variant="secondary">
                   <Image src="/image/1.png" fluid onClick={() => selectImage('1.png')}/>
                 </ToggleButton>
-                <ToggleButton id="tbg-radio-2" value={2}>
+                <ToggleButton id="tbg-radio-2" value={2} variant="secondary">
                   <Image src="/image/2.png" fluid onClick={() => selectImage('2.png')}/>
                 </ToggleButton>
-                <ToggleButton id="tbg-radio-3" value={3}>
+                <ToggleButton id="tbg-radio-3" value={3} variant="secondary">
                   <Image src="/image/3.png" fluid onClick={() => selectImage('3.png')}/>
                 </ToggleButton>
               </ToggleButtonGroup>

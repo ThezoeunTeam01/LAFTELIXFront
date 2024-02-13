@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { Button, Form, FormText, Image, ListGroupItem } from "react-bootstrap";
 import { call } from "../service/ApiService";
 import Col from 'react-bootstrap/Col';
@@ -17,11 +17,11 @@ type ReplyInfo = {
 
 type ShowReplyProps = {
   replyInfo:ReplyInfo;
-  updateReplyInfo:(replyInfo:ReplyInfo) => void;
-  deleteReplyInfo:(rno:number) => void;
+  updateReplyInfos:(replyInfo:ReplyInfo) => void;
+  deleteReplyInfos:(rno:number) => void;
 }
 
-function ShowReply({replyInfo, updateReplyInfo, deleteReplyInfo}:ShowReplyProps) {
+function ShowReply({replyInfo, updateReplyInfos, deleteReplyInfos}:ShowReplyProps) {
 
   // 댓글 수정
   const [updateContent,setUpdateContent] = useState(replyInfo);
@@ -45,7 +45,7 @@ function ShowReply({replyInfo, updateReplyInfo, deleteReplyInfo}:ShowReplyProps)
       console.log(updateContent);
       setButton("수정");
       setIsReadOnly(!isReadOnly);
-      updateReplyInfo(updateContent);
+      updateReplyInfos(updateContent);
     }
     
   }
@@ -59,19 +59,51 @@ function ShowReply({replyInfo, updateReplyInfo, deleteReplyInfo}:ShowReplyProps)
   // 삭제 버튼
   const deleteButton = (e:React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    deleteReplyInfo(replyInfo.rno);
+    deleteReplyInfos(replyInfo.rno);
   }
 
   // 댓글 좋아요
   const token = localStorage.getItem("ACCESS_TOKEN");
   const [replyLikeColor, setReplyLikeColor] = useState(false);
-  const replyLikeButton = (e:React.MouseEvent<HTMLButtonElement>) => {
+  const replyLikeButton = async (e:React.MouseEvent<HTMLButtonElement>) => {
     if(token !== null){
+      if(replyLikeColor === false) {
+        console.log(replyInfo.rno);
+        const response = await call("/reply/likeCreate","POST",{contentType: replyInfo.contentType,
+                                                                contentId: replyInfo.contentId,
+                                                                rno:replyInfo.rno,
+                                                                username:replyInfo.username});
+        console.log(response);
+      }else {
+        const response = await call("/reply/likeDelete","POST",{contentType: replyInfo.contentType,
+                                                                contentId: replyInfo.contentId,
+                                                                rno:replyInfo.rno,
+                                                                username:replyInfo.username});
+      }
       setReplyLikeColor(!replyLikeColor);
-    }else {   
+    } else {   
       alert("로그인 해주세요");
     }
   }
+  useEffect(() => {
+    console.log("여기 들어와?");
+    const fetch = async () => {
+      const response = await call("/reply/likeList","POST",{contentType: replyInfo.contentType,
+                                                              contentId: replyInfo.contentId,
+                                                              rno:replyInfo.rno,
+                                                              username:replyInfo.username});
+      console.log(response.status);
+      if(response.status === "exist") {
+        console.log("눌려있네");
+        setReplyLikeColor(true);
+      }else {
+        console.log("안눌려있어?");
+        setReplyLikeColor(false);
+      }
+    }
+    fetch();
+  },[])
+
 
   return(
       <Form className="pd30 border-bottom border-dark">        
@@ -84,6 +116,7 @@ function ShowReply({replyInfo, updateReplyInfo, deleteReplyInfo}:ShowReplyProps)
               <Form.Label>
                 <div className="d-flex gap-2 text-white align-items-center">
                   별점 표시 위치 <FontAwesomeIcon icon={faStar} /> <FontAwesomeIcon icon={faStar} /> <FontAwesomeIcon icon={faStar} /> <FontAwesomeIcon icon={faStar} /> <FontAwesomeIcon icon={faStar} />
+                  <span className="text-white fs-6">5.0</span>
                 </div>
               </Form.Label>
             </Form.Group>
@@ -123,7 +156,6 @@ function ShowReply({replyInfo, updateReplyInfo, deleteReplyInfo}:ShowReplyProps)
           {/* 댓글 좋아요 버튼 */}
           <Form.Group controlId="submit">
             <span onClick={replyLikeButton} style={{ cursor: `pointer` }}>
-              {/* <FontAwesomeIcon icon={faHeart} color={replyLikeColor ? "red":"black"}  /> */}
               <FontAwesomeIcon icon={faThumbsUp} color={replyLikeColor ? "white":"gray"}/>
             </span>
           </Form.Group>

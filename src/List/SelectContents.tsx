@@ -22,6 +22,7 @@ import ContentListSimilar from "./ContentListSimilar";
 
 // 로딩바 추가
 import loadingBar from "../image/loading/loadingBar.svg";
+import LandingBanner from "../landing/LandingBanner";
 
 interface SelectContents {
   contentId: number;
@@ -123,6 +124,8 @@ function SelectContents({
           "GET"
         );
         setReplyInfos(response);
+        console.log("replytest");
+        console.log(response);
         // API 호출 후에 데이터 설정 및 로딩 상태를 false로 설정
         setLoading(false);
       } catch (error) {
@@ -199,7 +202,8 @@ function SelectContents({
   const replySubmit = async (replyInfo: ReplyInfo) => {
     const response = await call("/reply/register", "POST", replyInfo);
 
-    console.log("REGIS" + response.data);
+    console.log("REGIS");
+    console.log(response);
 
     setReplyInfos(response.data);
   };
@@ -249,7 +253,7 @@ function SelectContents({
             // API 불러오는 동안 노출될 로딩바
             <div
               className="d-flex align-items-center justify-content-center"
-              style={{ minHeight: `500px` }}
+              style={{ minHeight: `500px`, border: `1px solid transparent` }}
             >
               <img src={loadingBar} alt="My SVG" />
             </div>
@@ -401,6 +405,11 @@ function SelectContents({
             </div>
           )}
 
+          {/* 랜딩 배너 */}
+          <div className="m-4">                        
+            <LandingBanner />
+          </div>
+
           <Tabs
             defaultActiveKey="like"
             id="uncontrolled-tab-example"
@@ -419,8 +428,8 @@ function SelectContents({
                 {replyInfos &&
                   replyInfos.map((replyInfo) => (
                       <ShowReply
-                        updateReplyInfo={updateReplyInfos}
-                        deleteReplyInfo={deleteReplyInfos}
+                        updateReplyInfos={updateReplyInfos}
+                        deleteReplyInfos={deleteReplyInfos}
                         replyInfo={replyInfo}
                       />
                   ))}
