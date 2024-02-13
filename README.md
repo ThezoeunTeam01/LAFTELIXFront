@@ -4,7 +4,7 @@
 프로젝트 깃허브 레퍼지토리에는 node module이 업로드 되어 있지 않기 때문에 
 git clone 진행 후 node module 설치를 위해 반드시 npm install 실행할 것!
 
-# 추가 설치된 npm install 
+# 추가 설치된 npm install - 반드시 설치하세요 미설치 시 오류남!!!!
 
 - 폰트어썸 - svg 아이콘 
 
@@ -20,9 +20,13 @@ npm install react-bootstrap bootstrap
 
 - AOS 애니메이션
 
-npm i --save-dev @types/aos
+- 기본 설치
+npm install aos --save
 
-# 설치된 리스트 확인 명령어
+- 타입스크립트로 사용하기 위해 추가 설치
+npm i --save-dev @types/aos 
+
+# 설치된 인스톨 리스트 확인 명령어
 
 npm list
 

@@ -53,7 +53,7 @@ const Landing = () => {
   <>       
     <section className="scrollContentBoxMain">
       <Container>
-        <div data-aos="fade-up" className="d-flex align-items-center justify-content-center" style={{ flexDirection: `row` }}>
+        <div data-aos="fade-up" className="d-flex flex-row align-items-center justify-content-center">
           <img src={mainLogo} style={{ width: '300px' }} alt="laftelix_logo"  />
           <FontAwesomeIcon icon={faXmark} style={{ color: '#fff', fontSize: '30px' }} />
           <img src={linkedLogo} style={{ width: '300px' }} alt="linked_logo" />
@@ -78,7 +78,7 @@ const Landing = () => {
     </section>
 
     <section className="scrollContentBox">
-      <Container className="d-flex align-items-center justify-content-around" style={{ flexDirection: `row` }}>
+      <Container className="d-flex flex-row align-items-center justify-content-around">
         <div className="text-white">
           <h3 data-aos="fade-up" className="landingContTitle"> 
             이봐, 나의 동료가 되지 않겠는가?
@@ -95,8 +95,8 @@ const Landing = () => {
     </section>    
 
     <section className="scrollContentBox">
-      <Container className="d-flex align-items-center justify-content-around" style={{ flexDirection: `row` }}>
-        <div className="d-flex" data-aos="fade-up">
+      <Container className="d-flex flex-row align-items-center justify-content-around">
+        <div className="d-flex flex-column" data-aos="fade-up">
           <div data-aos="fade-up" style={{width: `300px`, gridTemplateColumns: `1fr 1fr 1fr`, flexDirection: `row`, padding: `10px` , gap: `15px`}} className="d-flex harvey">
             <img src={logoIcon1} alt="landing01" />
             <img src={logoIcon2} alt="landing01" />
@@ -127,7 +127,7 @@ const Landing = () => {
     </section>
 
     <section className="scrollContentBox">
-      <Container className="d-flex align-items-center justify-content-around" style={{ flexDirection: `row` }}>
+      <Container className="d-flex flex-row align-items-center justify-content-around">
         <div>
           <img src={landing01} alt="landing02" style={{ width: "300px" }} data-aos="fade-up" />
         </div>
@@ -145,7 +145,7 @@ const Landing = () => {
     </section>
 
     <section className="scrollContentBox">
-      <Container className="d-flex align-items-center justify-content-around" style={{ flexDirection: `row` }}>
+      <Container className="d-flex flex-row align-items-center justify-content-around">
         <div className="text-white">
           <h3 data-aos="fade-up" className="landingContTitle"> 
             보안 문제가 걱정이라면?
