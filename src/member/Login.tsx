@@ -1,9 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Button, Container, Form, Modal, Overlay, Tooltip } from "react-bootstrap";
+import { Button, Col, Container, Form, Modal, Nav, Overlay, Row, Tooltip } from "react-bootstrap";
 import { signin } from "../service/ApiService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faEyeSlash, faXmark } from "@fortawesome/free-solid-svg-icons";
 import SocialKaKao from "./SocialKakao";
+import Register from "./Register";
+// import Nav from "react-bootstrap/Nav";
+import { Link } from "react-router-dom" 
 
 
 type LoginProps = {
@@ -52,6 +55,30 @@ function Login({ show, onHide }: LoginProps) {
     }
   }
 
+
+    // input type password <-> text 으로 변경 설정
+    const [passwordType, setPasswordType]=useState('password');
+    // input type password eyes 버튼 클릭 변경 설정
+    const [eyeIcon, setEyeIcon]=useState(<FontAwesomeIcon icon={faEyeSlash} />);
+  
+    const eyeIconOn = <FontAwesomeIcon icon={faEye} />;
+    const eyesIconOff = <FontAwesomeIcon icon={faEyeSlash} />; 
+  
+    // eye 아이콘 클릭 시, 타입 변경 및 아이콘 변경
+    const clickPasswordToggle=()=>{    
+      if(passwordType==='password'){
+        setEyeIcon(eyeIconOn);      
+        setPasswordType('text');
+      }
+      else{
+        setEyeIcon(eyesIconOff);     
+        setPasswordType('password');
+      }
+    }
+
+    const [registerModalShow, setRegisterModalShow] = useState(false);
+    const handleRegisterClick = () => setRegisterModalShow(true);
+
   return(
     // <div
     //   className="modal show" show={show} onHide={onHide}
@@ -67,7 +94,7 @@ function Login({ show, onHide }: LoginProps) {
         <Modal.Body className="bgColorBk pd20">
         <Button onClick={closeModal} className="backTrans borderTrans position-absolute end-0" style={{top:`10px`}}><FontAwesomeIcon icon={faXmark} className="fs-4" /></Button>
           <Modal.Title className="text-left pt40 fs-3">로그인</Modal.Title>
-          <Form className="pt40 pb40">
+          <Form className="pt40 pb20">
             <Form.Group className="mb30" controlId="username">
               <Form.Label>아이디</Form.Label>
               <Form.Control type="text" name="username" placeholder="아이디 입력" value={loginInfo.username} onChange={change} className="customInput"/>
@@ -75,10 +102,15 @@ function Login({ show, onHide }: LoginProps) {
 
             <Form.Group className="mb30" controlId="password">
               <Form.Label>비밀번호</Form.Label>
-              <Form.Control type="password" name="password" value={loginInfo.password} placeholder="비밀번호 입력" onChange={change} className="customInput"/>
+              <div className="position-relative">
+                <Form.Control type={passwordType} name="password" value={loginInfo.password} placeholder="비밀번호 입력" onChange={change} className="customInput"/>
+                <span onClick={clickPasswordToggle} className="position-absolute position-absolute top-50 end-0 translate-middle cursor-pointer">
+                  {eyeIcon}
+                </span>
+              </div>
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="submit">
+            <Form.Group className="mt-3 mb-3" controlId="submit">
               <Button ref={target} as="input" type="button" value="Login" style={{width:`100%`}} onClick={login} className="submitBtn fs-5 font-bold" />
               <Overlay target={target.current} show={loginShow} placement="right">
               {(props) => (
@@ -89,6 +121,20 @@ function Login({ show, onHide }: LoginProps) {
             </Overlay>
 
             <SocialKaKao />
+
+            <Row className="mt-5">
+              <Col sm={8}>
+                <span className="text-white-50">
+                  아직 회원이 아니라면? 
+                </span>
+              </Col>
+              <Col sm={4}>
+                <Nav.Link onClick={handleRegisterClick} className="text-white text-end">
+                  회원가입
+                </Nav.Link>
+              </Col>
+            </Row>
+            
           </Form.Group>
           </Form>
 
@@ -96,6 +142,10 @@ function Login({ show, onHide }: LoginProps) {
  
       </Modal>
       </Container>
+            {/* 회원가입 모달 */}
+            <div className="postion-absolute" style={{top:`80px`}}>
+        <Register show={registerModalShow} onHide={() => setRegisterModalShow(false)} />         
+      </div>
     </div>
   );
 }

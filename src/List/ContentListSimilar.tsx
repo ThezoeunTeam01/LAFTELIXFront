@@ -1,20 +1,10 @@
 import React, { useState, useEffect, FC } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
-import {
-  Button,
-  Carousel,
-  CarouselItem,
-  Col,
-  Container,
-  Row,
-} from "react-bootstrap";
+import { Button, Carousel, CarouselItem, Col, Container, Row, } from "react-bootstrap";
 // sass 파일
 import "../style/custom.scss";
-import {
-  faChevronLeft,
-  faChevronRight,
-} from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faChevronRight, } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import SelectContents from "./SelectContents";
 import internal from "stream";
@@ -122,13 +112,7 @@ function ContentListSimilar({
                       <img
                         src={`https://image.tmdb.org/t/p/w500${content.poster_path}`}
                         alt={content.title}
-                        style={{
-                          maxWidth: "100%",
-                          maxHeight: "100%",
-                          width: "auto",
-                          height: "auto",
-                          borderRadius: "10px",
-                        }}
+                        className="posterImg"
                       />
                     </div>
                   </Col>
@@ -137,18 +121,7 @@ function ContentListSimilar({
             </CarouselItem>
           ))}
         </Carousel>
-        <div
-          className="position-absolute"
-          style={{
-            textAlign: "center",
-            top: `50%`,
-            width: `100%`,
-            display: `flex`,
-            justifyContent: `space-between`,
-            transform: `translateY(-50%)`,
-            zIndex: 10,
-          }}
-        >
+        <div className="position-absolute slideArrowBox">
           {/* arrow 버튼 커스텀 */}
           <Button
             onClick={handlePrev}

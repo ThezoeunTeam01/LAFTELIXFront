@@ -3,7 +3,7 @@ import { Button, ButtonGroup, Col, Form, Image, Modal, Row, ToggleButton, Toggle
 import "bootstrap/dist/css/bootstrap.min.css";
 import { call } from "../service/ApiService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faEyeSlash, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { calculateNewValue } from "@testing-library/user-event/dist/utils";
 
 type UserInfo = {
@@ -196,12 +196,33 @@ function Register({ show, onHide }: RegisterProps) {
   // 중복 확인 버튼
   const doubleCheck = async(e:React.MouseEvent<HTMLButtonElement>) => {
     const response = await call(`/member/doubleCheck?username=${userInfo.username}`,"GET");
-    if(response.status=="possible"){
+    if(response.status==="possible"){
       alert("사용가능");
     }else{
       alert("중복되었습니다.");
     }
   }
+
+      // input type password <-> text 으로 변경 설정
+      const [passwordType, setPasswordType]=useState('password');
+      // input type password eyes 버튼 클릭 변경 설정
+      const [eyeIcon, setEyeIcon]=useState(<FontAwesomeIcon icon={faEyeSlash} />);
+    
+      const eyeIconOn = <FontAwesomeIcon icon={faEye} />;
+      const eyesIconOff = <FontAwesomeIcon icon={faEyeSlash} />; 
+    
+      // eye 아이콘 클릭 시, 타입 변경 및 아이콘 변경
+      const clickPasswordToggle=()=>{    
+        if(passwordType==='password'){
+          setEyeIcon(eyeIconOn);      
+          setPasswordType('text');
+        }
+        else{
+          setEyeIcon(eyesIconOff);     
+          setPasswordType('password');
+        }
+      }
+  
 
   return (
     // <div
@@ -219,22 +240,27 @@ function Register({ show, onHide }: RegisterProps) {
             <Form.Group className="mb30" controlId="username">
               <Form.Label>아이디</Form.Label>
               <Row>
-                <Col sm={9}>
+                <Col sm={9} style={{paddingRight:`0px`}}>
                 <div className="position-relative">
                   <Form.Control type="text"  maxLength={20} name="username" placeholder="아이디 입력" value={userInfo.username} onChange={inputChange} className="customInput" />
                   <span className="position-absolute top-50 end-0 translate-middle">{count}/20자</span>
                 </div>
-                {<p className={passwordLimit.test(userInfo.password) ? 'text-success' : 'text-danger'}>{idLength}</p>}
                 </Col>
-                <Col sm={3}>
-                  <Button onClick={doubleCheck}>중복확인</Button>
+                <Col sm={3}> 
+                  <Button onClick={doubleCheck} className="w-100 h-100" variant="primary">중복 확인</Button>
                 </Col>
               </Row>
+              {<p className={passwordLimit.test(userInfo.password) ? 'text-success' : 'text-danger'}>{idLength}</p>}
             </Form.Group>
             
             <Form.Group className="mb30" controlId="password">
               <Form.Label>비밀번호</Form.Label>
-              <Form.Control type="password" name="password" placeholder="비밀번호 입력" value={userInfo.password} onChange={onChangePassword} className="customInput" />
+              <div className="position-relative">
+              <Form.Control type={passwordType} name="password" placeholder="비밀번호 입력" value={userInfo.password} onChange={onChangePassword} className="customInput" />
+              <span onClick={clickPasswordToggle} className="position-absolute position-absolute top-50 end-0 translate-middle cursor-pointer">
+                {eyeIcon}
+              </span>
+              </div>
               {/* 비밀번호 제한 일치 여부에 따른 메세지 출력 */}
               {pwlimitCheckMessage && <p className={passwordLimit.test(userInfo.password) ? 'text-success' : 'text-danger'}>{pwlimitCheckMessage}</p>}
             </Form.Group>
@@ -242,15 +268,20 @@ function Register({ show, onHide }: RegisterProps) {
             <Form.Group className="mb30" controlId="passwordCheck">
               <Form.Label>비밀번호 확인</Form.Label>
               <Row>
-                <Col sm={9}>
-                  <Form.Control type="password" name="passwordCheck" placeholder="비밀번호 확인" value={userInfo.passwordCheck} onChange={inputChange} className="customInput" />
-                  {/* 비밀번호 일치 여부에 따른 메세지 출력 */}
-                  {buttonClicked && (<p className={passwordsMatch ? 'text-success' : 'text-danger'}>{passwordCheckMessage}</p>)}                  
+                <Col sm={9} style={{paddingRight:`0px`}}>
+                  <div className="position-relative">
+                  <Form.Control type={passwordType} name="passwordCheck" placeholder="비밀번호 확인" value={userInfo.passwordCheck} onChange={inputChange} className="customInput" />  
+                  <span onClick={clickPasswordToggle} className="position-absolute position-absolute top-50 end-0 translate-middle cursor-pointer">
+                    {eyeIcon}
+                  </span>
+                  </div>                
                 </Col>
                 <Col sm={3}>
-                  <Button className="btn btn-dark" onClick={passwordConfirm}>확인</Button>
+                  <Button className="w-100 h-100" onClick={passwordConfirm} variant="primary" >확인</Button>
                 </Col>
               </Row>
+              {/* 비밀번호 일치 여부에 따른 메세지 출력 */}
+              {buttonClicked && (<p className={passwordsMatch ? 'text-success' : 'text-danger'}>{passwordCheckMessage}</p>)}
             </Form.Group>
             
             <Form.Group className="mb-3" controlId="gender">
@@ -313,7 +344,7 @@ function Register({ show, onHide }: RegisterProps) {
               </ToggleButtonGroup>
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="submit">
+            <Form.Group className="mb-3 mt-5" controlId="submit">
               <Button as="input" type="button" value="회원가입" style={{width:`100%`}} onClick={formSubmit} className="submitBtn fs-5 font-bold" />
             </Form.Group>
           </Form>

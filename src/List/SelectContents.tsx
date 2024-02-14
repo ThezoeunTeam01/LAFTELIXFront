@@ -7,7 +7,7 @@ import ShowReply from "../reply/ShowReply";
 import { ListGroup, Overlay, Tooltip } from "react-bootstrap";
 
 import { Button, Container, Modal } from "react-bootstrap";
-import { faHeart, faPlay, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faHeart, faPlay, faVideo, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import Row from "react-bootstrap/Row";
@@ -23,6 +23,9 @@ import ContentListSimilar from "./ContentListSimilar";
 // 로딩바 추가
 import loadingBar from "../image/loading/loadingBar.svg";
 import LandingBanner from "../landing/LandingBanner";
+
+// 트레일러 오픈 버튼 컴포넌트
+import MovieTrailerBtn from "../trailer/MovieTrailerBtn";
 
 interface SelectContents {
   contentId: number;
@@ -140,11 +143,6 @@ function SelectContents({
 
   const userId = localStorage.getItem("userId");
 
-  // 재생하기 버튼 색상 처리
-  const [isPlayBtn, setisPlayBtn] = useState(false);
-  const handlePlayBtnClick2 = () => {
-    setisPlayBtn(!isPlayBtn);
-  };
 
   // 하트 이모티콘 버튼 색상처리
   const [heartColor, setHeartColor] = useState(false);
@@ -275,14 +273,7 @@ function SelectContents({
                       className="h-100 dimBg"
                       style={{ zIndex: 3, marginLeft: `0` }}
                     >
-                      <Col
-                        className="d-flex justify-content-start align-content-center"
-                        style={{
-                          marginLeft: `30px`,
-                          marginTop: `30px`,
-                          marginBottom: `30px`,
-                        }}
-                      >
+                      <Col className="d-flex justify-content-start align-content-center ml30 mt30 mb30">
                         {/* 영화 설명 */}
                         <div className="d-flex align-items-center">
                           <div>
@@ -297,7 +288,9 @@ function SelectContents({
                               {contents.overview}
                             </h3>
                             <div className="d-flex">
-                              <button
+                                {/* 무비 디테일과 트레일러 컴포넌트 렌더링 */}
+                                <MovieTrailerBtn modalContentId={modalContentId} showModal1={showModal} />
+                              {/* <button
                                 onClick={handlePlayBtnClick2}
                                 ref={target}
                                 className="btn fw-bold btnAnimation rounded-2"
@@ -318,26 +311,16 @@ function SelectContents({
                                   }}
                                 >
                                   <FontAwesomeIcon
-                                    icon={faPlay}
+                                    icon={faVideo}
                                     style={{
                                       fontSize: "20px",
                                       cursor: "pointer",
                                     }}
                                   />
-                                  &nbsp;재생하기
+                                  &nbsp;트레일러
                                 </div>
-                              </button>
-                              <Overlay
-                                target={target.current}
-                                show={show}
-                                placement="right"
-                              >
-                                {(props) => (
-                                  <Tooltip id="overlay-example" {...props}>
-                                    먼저 로그인 해주세요.
-                                  </Tooltip>
-                                )}
-                              </Overlay>
+                              </button> */}
+
 
                               {/* 찜버튼 */}
                               <button
@@ -405,6 +388,7 @@ function SelectContents({
             </div>
           )}
 
+
           {/* 랜딩 배너 */}
           <div className="m-4">                        
             <LandingBanner />
@@ -447,8 +431,11 @@ function SelectContents({
               </div>
             </Tab>
           </Tabs>
+
         </Modal.Body>
       </Modal>
+
+
     </div>
   );
 }

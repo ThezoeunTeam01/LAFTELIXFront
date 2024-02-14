@@ -32,19 +32,30 @@ function MainHeader() {
   const handleRegisterClick = () => setRegisterModalShow(true);
   // 로그인 페이지, 회원가입 페이지 불러오기 끝--
   
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      setScrolling(scrollTop > 0);
-    };
 
-    window.addEventListener('scroll', handleScroll);
+  const handleScroll = () => {
+    const scrollTop = window.scrollY;
+    setScrolling(scrollTop > 0);
+  };
 
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+  // 컴포넌트가 마운트될 때 이벤트 리스너 추가
+  window.addEventListener('scroll', handleScroll);
 
-  }, []);
+
+
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     const scrollTop = window.scrollY;
+  //     setScrolling(scrollTop > 0);
+  //   };
+
+  //   window.addEventListener('scroll', handleScroll);
+
+  //   return () => {
+  //     window.removeEventListener('scroll', handleScroll);
+  //   };
+
+  // }, []);
 
   const toggleIcon = show ? (
     <svg
@@ -93,6 +104,8 @@ function MainHeader() {
   let headerLogin = null;
 
   if(token != null) {
+
+    
     headerLogin = (
     <div className="d-flex">
       {/* <FontAwesomeIcon icon={faBell} /> */}

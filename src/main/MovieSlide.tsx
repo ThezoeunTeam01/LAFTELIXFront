@@ -23,10 +23,10 @@ interface Content {
   media_type: string;
 }
 
-const MainSlide: FC = () => {
+const MovieSlide: FC = () => {
   //슬라이드 변경 사항
   // 모두 = all 시리즈 = tv 영화 = movie
-  const SlideType = "all";
+  const SlideType = "movie";
   // 상세 검색 목록 추가(&language=ko는 생략)
   // TV discover 자료 https://developer.themoviedb.org/reference/discover-tv
   // Movie discover 자료 https://developer.themoviedb.org/reference/discover-movie
@@ -76,17 +76,19 @@ const MainSlide: FC = () => {
 
   return (
     // interval={null} - 슬라이드 멈추고 싶으면 추가
-    <Carousel fade className="" interval={null}>
+    <Carousel fade className="">
       {contents.map((content: Content) => (
         <CarouselItem key={content.id} style={{ cursor: `pointer` }}>
           <div className="vw-100 vh-100">
             <div className="w-100 h-100 position-absolute top-0 start-0 dimBg"></div>
+            {/* <div className=""> */}
             <img
               src={`https://image.tmdb.org/t/p/w1280/${content.backdrop_path}`}
               alt={content.title}
               className="vw-100 vh-100"
               style={{ objectFit: `cover` }}
             />
+            {/* </div> */}
           </div>
 
           <Carousel.Caption>
@@ -100,7 +102,15 @@ const MainSlide: FC = () => {
                 style={{ width: `45%`, marginBottom: `100px` }}
               >
                 <div className="d-flex flex-column gap-5">
-                  <div className="mainSlideLogoBox">
+                  <div
+                    className=""
+                    style={{
+                      width: `100%`,
+                      height: `300px`,
+                      display: `flex`,
+                      alignItems: `flex-end`,
+                    }}
+                  >
                     {content.logo_path === "" ? (
                       <h2 className="fs-3 text-white fw-bold mb-4">
                         {content.name}
@@ -115,7 +125,17 @@ const MainSlide: FC = () => {
                       />
                     )}
                   </div>
-                  <div className="fs-6 text-start mainCaptionBox">
+                  <div
+                    className="fs-6"
+                    style={{
+                      width: `80%`,
+                      overflow: "hidden",
+                      display: "-webkit-box",
+                      WebkitBoxOrient: "vertical",
+                      WebkitLineClamp: 3,
+                      lineHeight: 2,
+                    }}
+                  >
                     {" "}
                     {content.overview}
                   </div>
@@ -137,4 +157,4 @@ const MainSlide: FC = () => {
   );
 };
 
-export default MainSlide;
+export default MovieSlide;

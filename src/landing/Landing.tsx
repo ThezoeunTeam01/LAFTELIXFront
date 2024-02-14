@@ -97,17 +97,17 @@ const Landing = () => {
     <section className="scrollContentBox">
       <Container className="d-flex flex-row align-items-center justify-content-around">
         <div className="d-flex flex-column" data-aos="fade-up">
-          <div data-aos="fade-up" style={{width: `300px`, gridTemplateColumns: `1fr 1fr 1fr`, flexDirection: `row`, padding: `10px` , gap: `15px`}} className="d-flex harvey">
+          <div data-aos="fade-up" className="d-flex landingLogos">
             <img src={logoIcon1} alt="landing01" />
             <img src={logoIcon2} alt="landing01" />
             <img src={logoIcon3} alt="landing01" />
           </div>          
-          <div data-aos="fade-up" style={{width: `300px`, gridTemplateColumns: `1fr 1fr 1fr`, flexDirection: `row`, padding: `10px` , gap: `15px` }} className="d-flex harvey">
+          <div data-aos="fade-up" className="d-flex landingLogos">
             <img src={logoIcon4} alt="landing01" />
             <img src={logoIcon5} alt="landing01" />
             <img src={logoIcon6} alt="landing01" />
           </div>
-          <div data-aos="fade-up" style={{width: `300px`, gridTemplateColumns: `1fr 1fr 1fr` , flexDirection: `row`, padding: `10px` , gap: `15px` }} className="d-flex harvey">          
+          <div data-aos="fade-up" className="d-flex landingLogos">          
             <img src={logoIcon7} alt="landing01" />
             <img src={logoIcon8} alt="landing01" />
           </div>

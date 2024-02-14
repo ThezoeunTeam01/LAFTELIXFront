@@ -118,7 +118,7 @@ function ShowReply({replyInfo, updateReplyInfos, deleteReplyInfos}:ShowReplyProp
             <Form.Group controlId="content">
               <Form.Label>
                 <div className="d-flex gap-2 text-white align-items-center">
-                  별점 표시 위치 <FontAwesomeIcon icon={faStar} /> <FontAwesomeIcon icon={faStar} /> <FontAwesomeIcon icon={faStar} /> <FontAwesomeIcon icon={faStar} /> <FontAwesomeIcon icon={faStar} />
+                   <FontAwesomeIcon icon={faStar} /> <FontAwesomeIcon icon={faStar} /> <FontAwesomeIcon icon={faStar} /> <FontAwesomeIcon icon={faStar} /> <FontAwesomeIcon icon={faStar} />
                   <span className="text-white fs-6">5.0</span>
                 </div>
               </Form.Label>
