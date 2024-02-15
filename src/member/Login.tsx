@@ -144,7 +144,7 @@ function Login({ show, onHide }: LoginProps) {
       </Container>
             {/* 회원가입 모달 */}
             <div className="postion-absolute" style={{top:`80px`}}>
-        <Register show={registerModalShow} onHide={() => setRegisterModalShow(false)} />         
+        <Register show={registerModalShow} onHide={() => setRegisterModalShow(false)} setLoginModalShow={setLoginShow} />         
       </div>
     </div>
   );

@@ -19,10 +19,11 @@ type UserInfo = {
 type RegisterProps = {
   show: boolean;
   onHide: () => void;
+  setLoginModalShow: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 // 헤더 버튼에 연결하기 위해 수정.
-function Register({ show, onHide }: RegisterProps) {
+function Register({ show, onHide, setLoginModalShow }: RegisterProps) {
   // modalShow를 showModalState로 변경
   const [showModalState, setShowModalState] = useState<boolean>(false);
 
@@ -31,6 +32,18 @@ function Register({ show, onHide }: RegisterProps) {
     // closeModal 함수 구현
     setShowModalState(false);
     onHide(); // onHide 함수 호출
+    setUserInfo({
+      username:"",
+    password:"",
+    passwordCheck:"",
+    gender:"M",
+    regidentNumber:"10",
+    email:"",
+    img:"1.png"
+    });
+    setIdLength("");
+    setPwlimitCheckMessage("");
+    setPasswordCheckMessage("");
   };
 
   // 유저 값 초기화
@@ -50,9 +63,6 @@ function Register({ show, onHide }: RegisterProps) {
   // 비밀번호 제한과 일치 여부에 따른 메세지 값 저장
   const [pwlimitCheckMessage, setPwlimitCheckMessage] = useState<string | null>(null);
 
-  // 비밀번호 일치 여부를 나타내는 상태값 추가
-  const [passwordsMatch, setPasswordsMatch] = useState<boolean>(true);
-
   // 비밀번호 일치 / 불일치 시 출력되는 메세지 값 저장
   const [passwordCheckMessage, setPasswordCheckMessage] = useState<string | null>(null);
 
@@ -68,12 +78,6 @@ function Register({ show, onHide }: RegisterProps) {
       ...userInfo,
       [e.target.name]:e.target.value
     });
-    // 비밀번호가 변경될 때마다 일치 여부 업데이트
-    if (e.target.name === "password" || e.target.name === "passwordCheck") {
-      setPasswordsMatch(userInfo.password === e.target.value);
-      console.log(passwordsMatch);
-    }
-
     // 다른 로직 추가 가능 (예: 아이디 길이 체크)
     if(e.target.name==="username") {
       setCount(e.target.value.length);
@@ -84,7 +88,8 @@ function Register({ show, onHide }: RegisterProps) {
       }
     }
   };
-
+  const [pwColor,setPwColor] = useState('red');
+  const [pwCheckColor,setPwCheckColor] = useState('red');
   const passwordLimit = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*_\-+=])(?=.*[0-9]).{6,20}$/;
   // password 영어 대소문자, 숫자, 특수문자만 사용하도록 제한
   const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,21 +100,24 @@ function Register({ show, onHide }: RegisterProps) {
     });
     
     if (!passwordLimit.test(currentPassword)) {
+      setPwColor('red');
       setPwlimitCheckMessage("숫자, 영어 대소문자, 특수문자를 조합하여 6자리 이상 입력해주세요!");
     } else {
+      setPwColor('green');
       setPwlimitCheckMessage("사용가능한 비밀번호 입니다.");
     }
   };
 
   // 비밀번호 확인 버튼 클릭 시 메세지 출력 및 불일치 시 초기화 동작
   const passwordConfirm = (e:React.MouseEvent<HTMLButtonElement>) => {
-    if(passwordsMatch) {
+    if(userInfo.password.length>0&&userInfo.password===userInfo.passwordCheck) {
       // 비밀번호 일치 시 메세지 출력
+      setPwCheckColor('green');
       setPasswordCheckMessage("비밀번호가 일치합니다.");
     } else {
       // 비밀번호 불일치 시 예외 처리 및 메세지 출력
-      console.error("비밀번호가 일치하지 않습니다.");
-      setPasswordCheckMessage("비밀번호가 일치하지 않습니다!");
+      setPwCheckColor('red');
+      setPasswordCheckMessage("비밀번호가 일치하지 않습니다.");
       setUserInfo({
         ...userInfo,
         passwordCheck: ""
@@ -118,17 +126,6 @@ function Register({ show, onHide }: RegisterProps) {
     // 버튼 클릭 상태 업데이트
     setButtonClicked(true);
   };
-
-   // useEffect를 사용하여 버튼이 클릭된 경우 메시지 초기화 및 비밀번호 확인 값이 변경된 경우 메시지 숨김
-   useEffect(() => {
-    if (buttonClicked) {
-      // 버튼 클릭 시 메시지 출력
-      setPasswordCheckMessage(passwordsMatch ? "비밀번호가 일치합니다." : "비밀번호가 일치하지 않습니다!");
-    } else {
-      // 버튼 클릭되지 않은 경우 메시지 숨김
-      setPasswordCheckMessage(null);
-    }
-  }, [passwordsMatch, buttonClicked, userInfo.passwordCheck]);
 
   // img값 저장
   const selectImage = (value:string) => {
@@ -172,11 +169,23 @@ function Register({ show, onHide }: RegisterProps) {
     console.log(userInfo);
   };
 
+  // 회원가입 성공시 모달
+  const [registSuccessModal,setRegistSuccessModal] = useState(false);
+
+  const login = (e:React.MouseEvent<HTMLButtonElement>) => {
+    setLoginModalShow(true);
+    closeModal();
+    setRegistSuccessModal(false);
+  }
+  const main = (e:React.MouseEvent<HTMLButtonElement>) => {
+    window.location.href="/";
+  }
+
   const formSubmit = async (e:React.MouseEvent<HTMLButtonElement>) => {
-    // 비밀번호 일치 여부 체크
-    if (passwordsMatch&&passwordLimit.test(userInfo.password)&&userInfo.username.length>7) {
+    // 유효성 검사 통과시 회원가입
+    if (buttonClicked&&userInfo.username.length>7) {
       await call("/member/register","POST",userInfo);
-      // 회원가입 후 유저 값 초기화
+
       setUserInfo({
         username:"",
         password:"",
@@ -186,21 +195,26 @@ function Register({ show, onHide }: RegisterProps) {
         email:"",
         img:"1.png"
       });
-      window.location.href="/";
+      setRegistSuccessModal(true);
     } else {
-      // 비밀번호 불일치 시 예외 처리 혹은 메세지 표시
-      console.error("비밀번호가 일치하지 않습니다.");
-      
+      console.error("정보를 다시 입력하세요.");      
     }
   };
+  const [doubleCheckModal, setDoubleCheckModal] = useState(false);
+  const [doubleCheckMessage, setDoubleCheckMessage] = useState("");
   // 중복 확인 버튼
   const doubleCheck = async(e:React.MouseEvent<HTMLButtonElement>) => {
     const response = await call(`/member/doubleCheck?username=${userInfo.username}`,"GET");
     if(response.status==="possible"){
-      alert("사용가능");
+      setDoubleCheckModal(true);
+      setDoubleCheckMessage("사용하시겠습니까?");
     }else{
-      alert("중복되었습니다.");
+      setDoubleCheckModal(true);
+      setDoubleCheckMessage("중복 되었습니다.");
     }
+  }
+  const doubleCheckClose = (e:React.MouseEvent<HTMLButtonElement>) => {
+      setDoubleCheckModal(false);
   }
 
       // input type password <-> text 으로 변경 설정
@@ -222,7 +236,6 @@ function Register({ show, onHide }: RegisterProps) {
           setPasswordType('password');
         }
       }
-  
 
   return (
     // <div
@@ -250,7 +263,7 @@ function Register({ show, onHide }: RegisterProps) {
                   <Button onClick={doubleCheck} className="w-100 h-100" variant="primary">중복 확인</Button>
                 </Col>
               </Row>
-              {<p className={passwordLimit.test(userInfo.password) ? 'text-success' : 'text-danger'}>{idLength}</p>}
+              <p style={{color: 'red'}}>{idLength}</p>
             </Form.Group>
             
             <Form.Group className="mb30" controlId="password">
@@ -262,7 +275,7 @@ function Register({ show, onHide }: RegisterProps) {
               </span>
               </div>
               {/* 비밀번호 제한 일치 여부에 따른 메세지 출력 */}
-              {pwlimitCheckMessage && <p className={passwordLimit.test(userInfo.password) ? 'text-success' : 'text-danger'}>{pwlimitCheckMessage}</p>}
+              {pwlimitCheckMessage && <p style={{color:pwColor}}>{pwlimitCheckMessage}</p>}
             </Form.Group>
 
             <Form.Group className="mb30" controlId="passwordCheck">
@@ -281,7 +294,7 @@ function Register({ show, onHide }: RegisterProps) {
                 </Col>
               </Row>
               {/* 비밀번호 일치 여부에 따른 메세지 출력 */}
-              {buttonClicked && (<p className={passwordsMatch ? 'text-success' : 'text-danger'}>{passwordCheckMessage}</p>)}
+              {buttonClicked && (<p style={{color:pwCheckColor}}>{passwordCheckMessage}</p>)}
             </Form.Group>
             
             <Form.Group className="mb-3" controlId="gender">
@@ -349,8 +362,23 @@ function Register({ show, onHide }: RegisterProps) {
             </Form.Group>
           </Form>
         </Modal.Body>
+      {/* 회원가입 성공시 모달 */}
+      </Modal>
+      <Modal show={registSuccessModal}>
+        <Modal.Body>
+        <Modal.Title className="text-center mb40 fs-3">회원가입을 축하합니다!</Modal.Title>
+        <Button onClick={login}>로그인하러하기</Button>
+        <Button onClick={main}>메인화면으로 돌아가기</Button>
+        </Modal.Body>
+      </Modal>
+      <Modal show={doubleCheckModal}>
+        <Modal.Body>
+        <Modal.Title className="text-center mb40 fs-3">{doubleCheckMessage}</Modal.Title>
+        <Button onClick={doubleCheckClose}>확인</Button>
+        </Modal.Body>
       </Modal>
     </div>
+    
   );
 }
 
