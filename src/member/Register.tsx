@@ -200,22 +200,22 @@ function Register({ show, onHide, setLoginModalShow }: RegisterProps) {
       console.error("정보를 다시 입력하세요.");      
     }
   };
-  const [doubleCheckModal, setDoubleCheckModal] = useState(false);
-  const [doubleCheckMessage, setDoubleCheckMessage] = useState("");
+
   // 중복 확인 버튼
+  const [doubleCheckMessage, setDoubleCheckMessage] = useState("");
+  const [doubleCheckMessageColor, setDoubleCheckMessageColor] = useState('');
+  
   const doubleCheck = async(e:React.MouseEvent<HTMLButtonElement>) => {
     const response = await call(`/member/doubleCheck?username=${userInfo.username}`,"GET");
-    if(response.status==="possible"){
-      setDoubleCheckModal(true);
-      setDoubleCheckMessage("사용하시겠습니까?");
-    }else{
-      setDoubleCheckModal(true);
+    if(response.status==="possible"&&userInfo.username.length>7){
+      setDoubleCheckMessageColor('green');
+      setDoubleCheckMessage("사용 가능한 아이디니다.");
+    }else if(response.status==="impossible"&&userInfo.username.length>7){
+      setDoubleCheckMessageColor('red');
       setDoubleCheckMessage("중복 되었습니다.");
     }
   }
-  const doubleCheckClose = (e:React.MouseEvent<HTMLButtonElement>) => {
-      setDoubleCheckModal(false);
-  }
+
 
       // input type password <-> text 으로 변경 설정
       const [passwordType, setPasswordType]=useState('password');
@@ -263,6 +263,7 @@ function Register({ show, onHide, setLoginModalShow }: RegisterProps) {
                   <Button onClick={doubleCheck} className="w-100 h-100" variant="primary">중복 확인</Button>
                 </Col>
               </Row>
+              <p style={{color: doubleCheckMessageColor}}>{doubleCheckMessage}</p>
               <p style={{color: 'red'}}>{idLength}</p>
             </Form.Group>
             
@@ -369,12 +370,6 @@ function Register({ show, onHide, setLoginModalShow }: RegisterProps) {
         <Modal.Title className="text-center mb40 fs-3">회원가입을 축하합니다!</Modal.Title>
         <Button onClick={login}>로그인하러하기</Button>
         <Button onClick={main}>메인화면으로 돌아가기</Button>
-        </Modal.Body>
-      </Modal>
-      <Modal show={doubleCheckModal}>
-        <Modal.Body>
-        <Modal.Title className="text-center mb40 fs-3">{doubleCheckMessage}</Modal.Title>
-        <Button onClick={doubleCheckClose}>확인</Button>
         </Modal.Body>
       </Modal>
     </div>
