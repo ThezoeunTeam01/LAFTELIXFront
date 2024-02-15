@@ -19,7 +19,7 @@ const LandingBanner = () => {
           <CarouselItem className="text-center">
             {/* 배너 불러오기 테스트  새창으로 열림*/}
             <button type="button" className="btn banner">            
-              <Link to='./Landing' target="_blank" style={{textDecoration: `none`}}>
+              <Link to='/Landing' target="_blank" style={{textDecoration: `none`}}>
                 <div className="d-flex align-items-center justify-content-center pr-2 pl-2" >
                   <div className="d-flex align-items-center" style={{width:`150px`, height: `80px` }}>
                     <img src={Banner1} className="" style={{width:`100%` , height:`100%`, objectFit: `contain`}} />
@@ -33,7 +33,7 @@ const LandingBanner = () => {
             </CarouselItem>
             <CarouselItem className="text-center">
               <button type="button" className="btn banner">            
-                <Link to='./Landing' target="_blank" style={{textDecoration: `none`}}>
+                <Link to='/Landing' target="_blank" style={{textDecoration: `none`}}>
                 <div className="d-flex align-items-center justify-content-center pr-2 pl-2" >
                   <div className="d-flex align-items-center" style={{width:`150px`, height: `80px` }}>
                     <img src={Banner2} className="" style={{width:`100%` , height:`100%`, objectFit: `contain`}} />
@@ -47,7 +47,7 @@ const LandingBanner = () => {
             </CarouselItem> 
             <CarouselItem className="text-center">
             <button type="button" className="btn banner">            
-              <Link to='./Landing' target="_blank" style={{textDecoration: `none`}}>
+              <Link to='/Landing' target="_blank" style={{textDecoration: `none`}}>
                 <div className="d-flex align-items-center justify-content-center pr-2 pl-2" >
                   <div className="d-flex align-items-center" style={{width:`150px`, height: `80px` }}>
                     <img src={Banner3} className="" style={{width:`100%` , height:`100%`, objectFit: `contain`}} />

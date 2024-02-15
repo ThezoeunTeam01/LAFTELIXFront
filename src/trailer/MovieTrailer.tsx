@@ -48,7 +48,9 @@ const MovieTrailer: React.FC<MovieTrailerProps> = ({ modalContentId }) => {
         ></iframe>
       ) : (
         // 만약 동영상 없을 경우
-        <p>No trailer available.</p>
+        <div className="position-absolute top-50 start-50 translate-middle">
+          <p className="text-white text-center">아직 트레일러 영상이 준비되지 않은 콘텐츠 입니다.<br /> 빠른 시일 내에 준비하도록 하겠습니다. <br /><br /> 감사합니다.</p>
+        </div>
       )}
     </div>
   );
