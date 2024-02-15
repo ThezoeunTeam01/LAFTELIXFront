@@ -87,17 +87,14 @@ const SearchList: FC = () => {
     setIndex(index + 1);
   };
   return (
+    <div className="mt80">
     <Container style={{ paddingTop: `40px`, paddingBottom: `40px` }}>
-      <h1 className="text-white">검색어 : {search}</h1>
-      <div className="position-relative pt20">
+      <h2 className="text-white mb-3">검색어 : {search}</h2>
+      <div className="position-relative pt20 grid-container">
         {grouped.map((group, index) => (
-          <Row key={index}>
+            <div key={index} className="grid-row">
             {group.map((content: content) => (
-              <Col
-                key={content.id}
-                className="hoverAnimation"
-                style={{ width: `calc(100%/5)` }}
-              >
+              <div key={content.id} className="grid-item mb30 hoverAnimation">
                 <div
                   onClick={() => {
                     openModal(content.id, content.media_type);
@@ -107,19 +104,12 @@ const SearchList: FC = () => {
                   <img
                     src={`https://image.tmdb.org/t/p/w500${content.poster_path}`}
                     alt={content.title}
-                    style={{
-                      maxWidth: "100%",
-                      maxHeight: "100%",
-                      width: "100%",
-                      height: "100%",
-                      borderRadius: "10px",
-                      objectFit: "cover",
-                    }}
+                    className="grid-image"
                   />
                 </div>
-              </Col>
+              </div>
             ))}
-          </Row>
+          </div>
         ))}
 
         <div
@@ -160,6 +150,7 @@ const SearchList: FC = () => {
         />
       )}
     </Container>
+    </div>
   );
 };
 
