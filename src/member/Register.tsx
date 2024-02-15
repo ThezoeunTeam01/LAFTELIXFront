@@ -197,7 +197,7 @@ function Register({ show, onHide, setLoginModalShow }: RegisterProps) {
       });
       setRegistSuccessModal(true);
     } else {
-      console.error("정보를 다시 입력하세요.");      
+      console.error("정보를 다시 입력하세요.");
     }
   };
 

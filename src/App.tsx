@@ -11,6 +11,7 @@ import LandingBanner from './landing/LandingBanner';
 import SeriesComp from './List/SeriesComp';
 import MovieComp from './List/MovieComp';
 import TopButton from './main/TopButton';
+import SearchList from './List/SearchList';
 //import Top from './main/Top';
 
 function App() {  
@@ -51,7 +52,13 @@ function App() {
               <TopButton />
               <MainFooter />
             </div>
-          } />          
+          } />
+          <Route path="/:search" element={
+            <div>       
+              <MainHeader />
+              <SearchList />
+            </div>
+          } />        
           <Route path="/landing" element={
             <Landing />
           } />

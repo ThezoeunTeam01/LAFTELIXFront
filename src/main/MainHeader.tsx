@@ -3,7 +3,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import mainLogo from '../image/logo.png';
 import { Button, Form, Image, NavDropdown, Overlay } from "react-bootstrap";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 //import { showModal, closeModal } from '../member/Login'; // Login.tsx에서 함수들을 불러옴
 
 import Login from '../member/Login'; // Login.js 파일을 import
@@ -14,7 +14,7 @@ import MypageProfile from '../mypage/MypageProfile';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell, faCaretDown } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom" 
+import { Link, useNavigate } from "react-router-dom" 
 import { NavLink } from 'react-router-dom';
 
 function MainHeader() {
@@ -151,6 +151,14 @@ function MainHeader() {
     )
   }
 
+  // 검색 기능 구현
+
+  const navigate = useNavigate();
+
+  const SearchChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    navigate(`/${e.target.value}`);
+  }
+
   return (
     <Navbar fixed="top" style={{zIndex:20, paddingTop:`20px`, paddingBottom:`20px`, height:`80px`,
     background: scrolling ? 'linear-gradient(to bottom, black, black)' : 'linear-gradient(to bottom, black, rgba(0, 0, 0, 0.03))' }}>
@@ -199,10 +207,11 @@ function MainHeader() {
                 }}
               >
                 <Form.Control
-                  type="search"
+                  type="text"
                   placeholder=""
                   className="me-2"
                   aria-label="Search"
+                  onChange={SearchChange}
                 />
                 <Button variant="light">
                   <svg
