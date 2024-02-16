@@ -40,7 +40,7 @@ const MovieTrailer: React.FC<MovieTrailerProps> = ({ modalContentId }) => {
         <iframe
           width="100vw"
           height="100vh"
-          src={`https://www.youtube.com/embed/${trailer.key}?autoplay=1&mute=1&controls=0&frameborder=0&showinfo=0&modestbranding=1&rel=0&allowfullscreen`} 
+          src={`https://www.youtube.com/embed/${trailer.key}?autoplay=1&mute=1&controls=0&frameborder=0&showinfo=0&modestbranding=0&rel=0&allowfullscreen`} 
           title="YouTube video player"
           frameBorder="0"
           allowFullScreen

@@ -86,26 +86,29 @@ input.replyInput:read-only {
 }
 
 /* 버튼 커스텀 */
-.submitBtn{background:red !important; border:0px solid transparent; height: 64px; vertical-align: text-top; transition: all 0.1s ease-out 0.1s}
+.submitBtn{background:red !important; border:0px solid transparent; height: 64px; vertical-align: text-top; transition: all 0.2s ease-in-out}
 .submitBtn:hover, .submitBtn:focus{background:rgb(202, 0, 0) !important; }
 
-.deleteBtn{background:red !important; border:0px solid transparent; height: 64px; vertical-align: text-top;}
+.submitReverseBtn{background:transparent !important; border:1px solid #fff; height: 64px; vertical-align: text-top; transition: all 0.2s ease-in-out}
+.submitReverseBtn:hover, .submitReverseBtn:focus{background:rgba(197, 197, 197, 0.562) !important; border:1px solid #fff;}
+
+.deleteBtn{background:red !important; border:0px solid transparent; height: 64px; vertical-align: text-top; transition: all 0.2s ease-in-out}
 .deleteBtn:hover, .deleteBtn:focus{background:rgb(202, 0, 0) !important; }
 
-.deleteBtn{background:red !important; border:0px solid transparent; height: 64px; vertical-align: text-top;}
+.deleteBtn{background:red !important; border:0px solid transparent; height: 64px; vertical-align: text-top; transition: all 0.2s ease-in-out}
 .deleteBtn:hover, .deleteBtn:focus{background:rgb(202, 0, 0) !important; }
 
 .btnFlexBox{display: flex; gap: 10px;}
 .btnFlexBox .flexBtn{width: calc(50% - 5px);}
 
-.closeBtn{color:#fff;}
+.closeBtn{color:#fff; transition: all 0.2s ease-in-out}
 .closeBtn:hover, .closeBtn:focus{color:red}
 
 .kakaoBtn{background-color:#e4d534; color:#381e1f; border:0px solid transparent; width:100%; height: 64px; vertical-align: text-top; font-weight: 500;
-background-image: url("../image/sns/kakaotalk_logo.png"); background-size: 45px 45px; background-position: 15px center; background-repeat: no-repeat;}
+background-image: url("../image/sns/kakaotalk_logo.png"); background-size: 45px 45px; background-position: 15px center; background-repeat: no-repeat; transition: all 0.2s ease-in-out}
 .kakaoBtn:hover, .kakaoBtn:focus{background-color:#e4d534cb; color:#381e1f;}
 
-.kakaoBtn2{background-color:transparent; color:#fff; border:1px solid #fff; width:100%; height: 64px; vertical-align: text-top; align-items: center;}
+.kakaoBtn2{background-color:transparent; color:#fff; border:1px solid #fff; width:100%; height: 64px; vertical-align: text-top; align-items: center; transition: all 0.2s ease-in-out}
 .kakaoBtn2:hover, .kakaoBtn2:focus{background-color:#a99e29;}
 
 // top 버튼 
@@ -125,7 +128,7 @@ background-image: url("../image/sns/kakaotalk_logo.png"); background-size: 45px 
 .arrowBtnLeft svg, .arrowBtnRight svg{font-size: 25px;}
 
 /*drop down*/
-.navbar-expand .navbar-nav .dropdown-menu {top:60px;}
+.navbar-expand .navbar-nav .dropdown-menu {top:60px; left: -124px;}
 
 /* 마이페이지 찜리스트 5개씩 노출되도록 그리드 설정 */
 .grid-container { display: grid; gap: 10px;}
@@ -147,8 +150,7 @@ background-image: url("../image/sns/kakaotalk_logo.png"); background-size: 45px 
 /**/
 .mainSlideLogoBox{width: 100%; height: 300px; display: flex; align-items: flex-end;}
 
-
-.mainCaptionBox{ width: 80%;
+.textOverflow3Lines{ width: 80%;
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -250,12 +252,17 @@ background-image: url("../image/sns/kakaotalk_logo.png"); background-size: 45px 
 .trailerOpenBtn{ background-color: transparent; border: 0px solid transparent; padding: 0; margin-right: 30px; }
 .trailerOpenBtnIconBox{background-color: rgba(255, 255, 255, 0.2); padding: 15px 30px; text-align: center; color: rgb(255, 255, 255); border: 1px solid rgb(255, 255, 255); transition: all 0.2s ease-out 0.1s; display: flex; align-items: center;}
 .trailerOpenBtnIconBox:hover, .trailerOpenBtnIconBox:focus{background-color: rgba(255, 255, 255, 0.8); color:#000; }
-.trailerMovieBox{width:100%; height:100%; padding:40px; background: rgb(0 0 0 / 80%);}
+.trailerCloseBtn{ padding: 4px 8px; background: none; border: 0px solid transparent; top: 10px !important; right: 10px !important; display: flex; align-items: center; justify-content: center;}
+.trailerCloseBtn:hover, .trailerCloseBtn:focus{background-color: rgb(212, 2, 2); color:#000; }
+.trailerMovieBox{width:100%; height:100%; padding:50px; background: rgb(0 0 0 / 80%);}
 .trailerMovieIframe{width:100%; height:100%; }
 
 //
 .posterImg{ max-width: 100%; max-height: 100%; width: auto; height: auto; border-radius: 10px; }
 
 // Slide
-.slideArrowBox{ text-align: center; top: 50%; width: 100%; display: flex; justify-content: space-between; transform: translateY(-50%); z-index: 10;
-}
+.slideArrowBox{ text-align: center; top: 50%; width: 100%; display: flex; justify-content: space-between; transform: translateY(-50%); z-index: 10;}
+
+// iframe
+.ytp-chrome-top-buttons{display: none !important}
+.ytp-watermark .yt-uix-sessionlink{display: none !important}

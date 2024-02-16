@@ -47,8 +47,8 @@ const MovieTrailerBtn: React.FC<MovieTrailerBtnProps> = ({ modalContentId, showM
       <Modal show={showTrailer} fullscreen={true} onHide={handleCloseTrailer} >
         <Modal.Body className="position-relative p-0">
           <MovieTrailer modalContentId={modalContentId} />
-          <Button variant="secondary" onClick={handleCloseTrailer} className="position-absolute top-0 end-0">
-            <FontAwesomeIcon icon={faXmark} style={{ color: '#fff', fontSize: '30px' }} />
+          <Button onClick={handleCloseTrailer} className="position-absolute top-0 end-0 fs-4 backTrans borderTrans">
+            <FontAwesomeIcon icon={faXmark} className="fs-4 btnAnimation closeBtn" />
           </Button>
         </Modal.Body>
       </Modal>
