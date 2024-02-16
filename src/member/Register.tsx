@@ -3,8 +3,9 @@ import { Button, ButtonGroup, Col, Form, Image, Modal, Row, ToggleButton, Toggle
 import "bootstrap/dist/css/bootstrap.min.css";
 import { call } from "../service/ApiService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faEyeSlash, faUserCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { calculateNewValue } from "@testing-library/user-event/dist/utils";
+import mainLogo from '../image/logo.png';
 
 type UserInfo = {
   username:string;
@@ -197,7 +198,7 @@ function Register({ show, onHide, setLoginModalShow }: RegisterProps) {
       });
       setRegistSuccessModal(true);
     } else {
-      console.error("정보를 다시 입력하세요.");
+      console.error("정보를 다시 입력하세요.");      
     }
   };
 
@@ -209,7 +210,7 @@ function Register({ show, onHide, setLoginModalShow }: RegisterProps) {
     const response = await call(`/member/doubleCheck?username=${userInfo.username}`,"GET");
     if(response.status==="possible"&&userInfo.username.length>7){
       setDoubleCheckMessageColor('green');
-      setDoubleCheckMessage("사용 가능한 아이디니다.");
+      setDoubleCheckMessage("사용 가능한 아이디입니다.");
     }else if(response.status==="impossible"&&userInfo.username.length>7){
       setDoubleCheckMessageColor('red');
       setDoubleCheckMessage("중복 되었습니다.");
@@ -365,11 +366,21 @@ function Register({ show, onHide, setLoginModalShow }: RegisterProps) {
         </Modal.Body>
       {/* 회원가입 성공시 모달 */}
       </Modal>
-      <Modal show={registSuccessModal}>
-        <Modal.Body>
-        <Modal.Title className="text-center mb40 fs-3">회원가입을 축하합니다!</Modal.Title>
-        <Button onClick={login}>로그인하러하기</Button>
-        <Button onClick={main}>메인화면으로 돌아가기</Button>
+      <Modal show={registSuccessModal} centered size="lg" fullscreen={true}>
+        <Modal.Body className="position-relative bgColorBk">
+          <img src={mainLogo} style={{ width: "100px" }} />
+          <div className="position-absolute top-50 start-50 translate-middle d-flex flex-column align-items-center justify-content-center">
+            <FontAwesomeIcon icon={faUserCheck} className="text-white" style={{ fontSize:`50px`, marginBottom: `25px`}}/>                  
+            <Modal.Title className="text-center fs-2 text-white mb-4">회원가입이 완료되었습니다!</Modal.Title>
+            <p className="text-white-50 text-center">
+              국내 최대 OTT 정보 공유 커뮤니티 '라프텔릭스'에서<br /> 
+              새로운 콘텐츠 정보를 공유하고, 인생작을 만나 보세요!
+            </p>
+            <div className="d-flex align-items-center justify-content-center gap-4 w-100 mt-4">
+              <Button onClick={login} className="w-50 submitBtn">로그인</Button>
+              <Button onClick={main} className="w-50 submitReverseBtn">메인화면으로</Button>
+            </div> 
+          </div>                     
         </Modal.Body>
       </Modal>
     </div>
