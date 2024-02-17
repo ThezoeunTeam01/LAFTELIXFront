@@ -12,7 +12,9 @@ import SeriesComp from './List/SeriesComp';
 import MovieComp from './List/MovieComp';
 import TopButton from './main/TopButton';
 import SearchList from './List/SearchList';
-//import Top from './main/Top';
+import MovieTrendingWeekList from './List/MovieTrendingWeekList';
+import TvTrendingWeekList from './List/TvTrendingWeekList';
+
 
 function App() {  
   return (
@@ -23,6 +25,8 @@ function App() {
             <div>
               <MainHeader />
               <MainSlide />
+              <MovieTrendingWeekList />
+              <TvTrendingWeekList />
               <TVAniList />
               <TopButton />
               <MainFooter />

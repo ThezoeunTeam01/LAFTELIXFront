@@ -41,21 +41,19 @@ function MainHeader() {
   // 컴포넌트가 마운트될 때 이벤트 리스너 추가
   window.addEventListener('scroll', handleScroll);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setScrolling(scrollTop > 0);
+    };
 
+    window.addEventListener('scroll', handleScroll);
 
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     const scrollTop = window.scrollY;
-  //     setScrolling(scrollTop > 0);
-  //   };
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
 
-  //   window.addEventListener('scroll', handleScroll);
-
-  //   return () => {
-  //     window.removeEventListener('scroll', handleScroll);
-  //   };
-
-  // }, []);
+  }, []);
 
   const toggleIcon = show ? (
     <svg
@@ -91,7 +89,20 @@ function MainHeader() {
 
   const token = localStorage.getItem("ACCESS_TOKEN");
   const username = localStorage.getItem("username");
-  const img = localStorage.getItem("img");
+  
+  const [imageUrl, setImageUrl] = useState<string>('');
+
+  // useEffect 사용해서 컴포넌트가 처음 마운트될 때만 실행되도록 처리
+  useEffect(() => {
+    // 로컬 스토리지에서 이미지 URL을 가져와서 업데이트
+    const interval = setInterval(() => {
+      const storedImageUrl = localStorage.getItem('img');
+      setImageUrl(storedImageUrl || '');
+    }); 
+    // 컴포넌트가 언마운트될 때 interval을 클리어  
+    return () => clearInterval(interval); 
+  }, []); 
+
   
   const handleLogOut = (e:React.MouseEvent<HTMLElement>) => {
     localStorage.removeItem("ACCESS_TOKEN");
@@ -114,12 +125,12 @@ function MainHeader() {
         <NavDropdown 
             title={<div className="d-flex align-items-center gap-2 position-absolute" 
             style={{top:`5px`}}>
-            <Image src={`/image/${img}`} alt="img" className="rounded" style={{ width: '30px', height: '30px' }} />
+            <Image src={`/image/${imageUrl}`} alt="img" className="rounded" style={{ width: '30px', height: '30px' }} />
             <span><FontAwesomeIcon icon={faCaretDown} style={{color:`#fff`}}/></span></div>} 
             id="basic-nav-dropdown">
           <NavDropdown.Item href="#action/3.1">
             <div className="d-flex align-items-center gap-4">
-              <Image src={`/image/${img}`} alt="img" className="rounded" style={{width:`40px`, height:`40px`}} />
+              <Image src={`/image/${imageUrl}`} alt="img" className="rounded" style={{width:`40px`, height:`40px`}} />
               <div>
                 <span className="fs-5 fw-bold">{username} 님</span>
                 <div>환영합니다</div>
