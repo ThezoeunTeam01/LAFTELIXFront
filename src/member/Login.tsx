@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Col, Container, Form, Modal, Nav, Overlay, Row, Tooltip } from "react-bootstrap";
-import { signin } from "../service/ApiService";
+import { call, signin } from "../service/ApiService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash, faXmark } from "@fortawesome/free-solid-svg-icons";
 import SocialKaKao from "./SocialKakao";
@@ -9,13 +9,27 @@ import Register from "./Register";
 import { Link } from "react-router-dom" 
 
 
+type Props = {
+  email:string;
+  regidentNumber:number;
+  gender:string;
+}
+
 type LoginProps = {
   show: boolean;
+  setLoginModalShow: React.Dispatch<React.SetStateAction<boolean>>;
   onHide: () => void;
 };
 
 // 헤더 버튼에 연결하기 위해 수정
-function Login({ show, onHide }: LoginProps) {
+function Login({ show, onHide, setLoginModalShow }: LoginProps) {
+
+  const [propsInfo, setPropsInfo] = useState<Props>({
+    email:"",
+    regidentNumber:0,
+    gender:""
+  });
+
   const [modalShow, setModalShow] = useState<boolean>(false);
   //
   const [loginShow, setLoginShow] = useState(false);
@@ -48,10 +62,14 @@ function Login({ show, onHide }: LoginProps) {
     
   };
 
+
+  // 로그인 실패시 실패 문구 출력
+  const [falseLogin, setFalseLogin] = useState(false);
+
   const login = async () => {
     const response = await signin(loginInfo);
     if(response === "login_fail") {
-      ;
+      setFalseLogin(true);
     }
   }
 
@@ -112,7 +130,7 @@ function Login({ show, onHide }: LoginProps) {
 
             <Form.Group className="mt-3 mb-3" controlId="submit">
               <Button ref={target} as="input" type="button" value="Login" style={{width:`100%`}} onClick={login} className="submitBtn fs-5 font-bold" />
-              <Overlay target={target.current} show={loginShow} placement="right">
+              <Overlay target={target.current} show={falseLogin} placement="right">
               {(props) => (
                 <Tooltip id="overlay-example" {...props}>
                   아이디와 비밀번호를 확인해 주세요.
@@ -120,7 +138,7 @@ function Login({ show, onHide }: LoginProps) {
               )}
             </Overlay>
 
-            <SocialKaKao />
+            <SocialKaKao/>
 
             <Row className="mt-5">
               <Col sm={8}>
@@ -144,7 +162,7 @@ function Login({ show, onHide }: LoginProps) {
       </Container>
             {/* 회원가입 모달 */}
             <div className="postion-absolute" style={{top:`80px`}}>
-        <Register show={registerModalShow} onHide={() => setRegisterModalShow(false)} setLoginModalShow={setLoginShow} />         
+        <Register show={registerModalShow} onHide={() => setRegisterModalShow(false)} setLoginModalShow={setLoginShow} propsInfo={propsInfo} />         
       </div>
     </div>
   );
