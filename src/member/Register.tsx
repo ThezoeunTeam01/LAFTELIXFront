@@ -218,25 +218,37 @@ function Register({ show, onHide, setLoginModalShow }: RegisterProps) {
   }
 
 
-      // input type password <-> text 으로 변경 설정
-      const [passwordType, setPasswordType]=useState('password');
-      // input type password eyes 버튼 클릭 변경 설정
-      const [eyeIcon, setEyeIcon]=useState(<FontAwesomeIcon icon={faEyeSlash} />);
-    
-      const eyeIconOn = <FontAwesomeIcon icon={faEye} />;
-      const eyesIconOff = <FontAwesomeIcon icon={faEyeSlash} />; 
-    
-      // eye 아이콘 클릭 시, 타입 변경 및 아이콘 변경
-      const clickPasswordToggle=()=>{    
-        if(passwordType==='password'){
-          setEyeIcon(eyeIconOn);      
-          setPasswordType('text');
-        }
-        else{
-          setEyeIcon(eyesIconOff);     
-          setPasswordType('password');
-        }
-      }
+ // 각 인풋의 타입을 관리하는 상태
+ const [passwordType1, setPasswordType1] = useState('password');
+ const [passwordType2, setPasswordType2] = useState('password');
+
+ // 각 인풋에 대한 아이콘 상태
+ const [eyeIcon1, setEyeIcon1] = useState(<FontAwesomeIcon icon={faEyeSlash} />);
+ const [eyeIcon2, setEyeIcon2] = useState(<FontAwesomeIcon icon={faEyeSlash} />);
+
+ const eyeIconOn = <FontAwesomeIcon icon={faEye} />;
+ const eyesIconOff = <FontAwesomeIcon icon={faEyeSlash} />;
+
+ // 각 인풋의 아이콘이 클릭될 때 타입 변경 및 아이콘 변경
+ const clickPasswordToggle1 = () => {
+   if (passwordType1 === 'password') {
+     setEyeIcon1(eyeIconOn);
+     setPasswordType1('text');
+   } else {
+     setEyeIcon1(eyesIconOff);
+     setPasswordType1('password');
+   }
+ };
+
+ const clickPasswordToggle2 = () => {
+   if (passwordType2 === 'password') {
+     setEyeIcon2(eyeIconOn);
+     setPasswordType2('text');
+   } else {
+     setEyeIcon2(eyesIconOff);
+     setPasswordType2('password');
+   }
+ };
 
   return (
     // <div
@@ -267,13 +279,13 @@ function Register({ show, onHide, setLoginModalShow }: RegisterProps) {
               <p style={{color: doubleCheckMessageColor}}>{doubleCheckMessage}</p>
               <p style={{color: 'red'}}>{idLength}</p>
             </Form.Group>
-            
+
             <Form.Group className="mb30" controlId="password">
               <Form.Label>비밀번호</Form.Label>
               <div className="position-relative">
-              <Form.Control type={passwordType} name="password" placeholder="비밀번호 입력" value={userInfo.password} onChange={onChangePassword} className="customInput" />
-              <span onClick={clickPasswordToggle} className="position-absolute position-absolute top-50 end-0 translate-middle cursor-pointer">
-                {eyeIcon}
+              <Form.Control type={passwordType1} name="password" placeholder="비밀번호 입력" value={userInfo.password} onChange={onChangePassword} className="customInput" />
+              <span onClick={clickPasswordToggle1} className="position-absolute position-absolute top-50 end-0 translate-middle cursor-pointer">
+                {eyeIcon1}
               </span>
               </div>
               {/* 비밀번호 제한 일치 여부에 따른 메세지 출력 */}
@@ -285,9 +297,9 @@ function Register({ show, onHide, setLoginModalShow }: RegisterProps) {
               <Row>
                 <Col sm={9} style={{paddingRight:`0px`}}>
                   <div className="position-relative">
-                  <Form.Control type={passwordType} name="passwordCheck" placeholder="비밀번호 확인" value={userInfo.passwordCheck} onChange={inputChange} className="customInput" />  
-                  <span onClick={clickPasswordToggle} className="position-absolute position-absolute top-50 end-0 translate-middle cursor-pointer">
-                    {eyeIcon}
+                  <Form.Control type={passwordType2} name="passwordCheck" placeholder="비밀번호 확인" value={userInfo.passwordCheck} onChange={inputChange} className="customInput" />  
+                  <span onClick={clickPasswordToggle2} className="position-absolute position-absolute top-50 end-0 translate-middle cursor-pointer">
+                    {eyeIcon2}
                   </span>
                   </div>                
                 </Col>
