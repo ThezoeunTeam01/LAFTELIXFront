@@ -2,7 +2,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import mainLogo from '../image/logo.png';
-import { Button, Form, Image, NavDropdown, Overlay } from "react-bootstrap";
+import { Button, Form, Image, Modal, NavDropdown, Overlay } from "react-bootstrap";
 import React, { useEffect, useRef, useState } from "react";
 //import { showModal, closeModal } from '../member/Login'; // Login.tsx에서 함수들을 불러옴
 
@@ -16,6 +16,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell, faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom" 
 import { NavLink } from 'react-router-dom';
+import { call } from "../service/ApiService";
+
+type Props = {
+  email:string;
+  regidentNumber:number;
+  gender:string;
+}
 
 function MainHeader() {
   const [show, setShow] = useState(false);
@@ -112,6 +119,53 @@ function MainHeader() {
     window.location.href="/";
   }
 
+  // 인가 코드
+  const [registerContinueModal,setRegisterContinueModal] = useState(false);
+  const code = new URL(window.location.href).searchParams.get("code");
+
+  const [propsInfo,setPropsInfo] = useState({
+    email:"",
+    regidentNumber:0,
+    gender:""
+  });
+
+  useEffect(() => {
+   const fetchData = async () => {
+        
+       if(code!==null) {
+        const response = await call(`/member/socialLogin?code=${code}`,"GET");
+       if(response.status==="not-exist"&& code!=null) {
+         setRegisterContinueModal(true);
+         console.log(response.regidentNumber);
+         console.log(response.gender);
+         console.log(response.email);
+         setPropsInfo({
+          email: response.email,
+          regidentNumber: response.regidentNumber,
+          gender: response.gender
+        });
+
+
+       } else {
+          localStorage.setItem("ACCESS_TOKEN", response.token);
+          localStorage.setItem("userId", response.id);
+          localStorage.setItem("username",response.username);
+          localStorage.setItem("img",response.img);
+          window.location.href="/";
+       }
+       }
+   }
+   fetchData();
+  },[]);
+
+  const ContinueConfirm = (e:React.MouseEvent<HTMLButtonElement>) => {
+    setRegisterContinueModal(false);
+    setRegisterModalShow(true);
+  }
+
+  const ContinueCalcel = (e:React.MouseEvent<HTMLButtonElement>) => {
+    setRegisterContinueModal(false);
+  }
   let headerLogin = null;
 
   if(token != null) {
@@ -251,11 +305,20 @@ function MainHeader() {
       </div>
       {/* 로그인 모달 */}
       <div className="postion-absolute" style={{top:`80px`}}>
-        <Login show={loginModalShow} onHide={() => setLoginModalShow(false)} />
+        <Login show={loginModalShow} setLoginModalShow={setLoginModalShow} onHide={() => setLoginModalShow(false)} />
       </div>
       {/* 회원가입 모달 */}
       <div className="postion-absolute" style={{top:`80px`}}>
-        <Register show={registerModalShow} onHide={() => setRegisterModalShow(false)} setLoginModalShow={setLoginModalShow} />         
+        <Register show={registerModalShow} onHide={() => setRegisterModalShow(false)} setLoginModalShow={setLoginModalShow} propsInfo={propsInfo} />         
+      </div>
+      <div className="postion-absolute" style={{top:`80px`}}>
+        <Modal show={registerContinueModal} centered>
+          <Modal.Body>
+            <Modal.Title className="text-center mb40 fs-3">회원이 아닙니다.회원가입을 진행하시겠습니까?</Modal.Title>
+            <Button onClick={ContinueCalcel}>취소</Button>
+            <Button onClick={ContinueConfirm}>확인</Button>
+          </Modal.Body>
+        </Modal>
       </div>
     </Navbar>
   );

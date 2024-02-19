@@ -17,14 +17,22 @@ type UserInfo = {
   img?:string;
 };
 
+type Props = {
+  email:string;
+  regidentNumber:number;
+  gender:string;
+}
+
 type RegisterProps = {
   show: boolean;
   onHide: () => void;
   setLoginModalShow: React.Dispatch<React.SetStateAction<boolean>>;
+  propsInfo: Props;
 };
 
 // 헤더 버튼에 연결하기 위해 수정.
-function Register({ show, onHide, setLoginModalShow }: RegisterProps) {
+function Register({ show, onHide, setLoginModalShow, propsInfo }: RegisterProps) {
+
   // modalShow를 showModalState로 변경
   const [showModalState, setShowModalState] = useState<boolean>(false);
 
@@ -57,6 +65,17 @@ function Register({ show, onHide, setLoginModalShow }: RegisterProps) {
     email:"",
     img:"1.png"
   });
+
+  useEffect(() => {
+    console.log("프롭스정보");
+    console.log(propsInfo.email);
+    setUserInfo(prevUserInfo => ({
+      ...prevUserInfo,
+      gender: propsInfo.gender,
+      regidentNumber: propsInfo.regidentNumber,
+      email: propsInfo.email
+    }));
+  }, [propsInfo]);
 
   // username 글 제한
   const [count, setCount] = useState(0);
@@ -280,11 +299,13 @@ function Register({ show, onHide, setLoginModalShow }: RegisterProps) {
               <p style={{color: 'red'}}>{idLength}</p>
             </Form.Group>
 
+     
+
             <Form.Group className="mb30" controlId="password">
               <Form.Label>비밀번호</Form.Label>
               <div className="position-relative">
               <Form.Control type={passwordType1} name="password" placeholder="비밀번호 입력" value={userInfo.password} onChange={onChangePassword} className="customInput" />
-              <span onClick={clickPasswordToggle1} className="position-absolute position-absolute top-50 end-0 translate-middle cursor-pointer">
+              <span onClick={clickPasswordToggle1} className="position-absolute position-absolute top-50 end-0 translate-middle" style={{cursor:`pointer`}}>
                 {eyeIcon1}
               </span>
               </div>
@@ -298,7 +319,7 @@ function Register({ show, onHide, setLoginModalShow }: RegisterProps) {
                 <Col sm={9} style={{paddingRight:`0px`}}>
                   <div className="position-relative">
                   <Form.Control type={passwordType2} name="passwordCheck" placeholder="비밀번호 확인" value={userInfo.passwordCheck} onChange={inputChange} className="customInput" />  
-                  <span onClick={clickPasswordToggle2} className="position-absolute position-absolute top-50 end-0 translate-middle cursor-pointer">
+                  <span onClick={clickPasswordToggle2} className="position-absolute position-absolute top-50 end-0 translate-middle" style={{cursor:`pointer`}}>
                     {eyeIcon2}
                   </span>
                   </div>                
