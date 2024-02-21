@@ -136,8 +136,6 @@ function MainHeader() {
         const response = await call(`/member/socialLogin?code=${code}`,"GET");
        if(response.status==="not-exist"&& code!=null) {
          setRegisterContinueModal(true);
-         console.log(response.regidentNumber);
-         console.log(response.gender);
          console.log(response.email);
          setPropsInfo({
           email: response.email,
