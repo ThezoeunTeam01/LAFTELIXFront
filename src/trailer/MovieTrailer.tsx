@@ -7,16 +7,17 @@ interface MovieTrailer {
 
 interface MovieTrailerProps {
   modalContentId: number;
+  modalContentType: String;
 }
 
-const MovieTrailer: React.FC<MovieTrailerProps> = ({ modalContentId }) => {
+const MovieTrailer: React.FC<MovieTrailerProps> = ({ modalContentId, modalContentType }) => {
   const [trailer, setTrailer] = useState<MovieTrailer | null>(null);
 
   useEffect(() => {
     const fetchTrailer = async () => {
       try {
         const response = await axios.get(
-          `https://api.themoviedb.org/3/movie/${modalContentId}/videos?api_key=9c8709e24862b7b00803591402286323`
+          `https://api.themoviedb.org/3/${modalContentType}/${modalContentId}/videos?api_key=9c8709e24862b7b00803591402286323`
         );
 
         const trailer = response.data.results.find(

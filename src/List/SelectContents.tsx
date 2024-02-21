@@ -289,7 +289,7 @@ function SelectContents({
                             </h3>
                             <div className="d-flex">
                                 {/* 무비 디테일과 트레일러 컴포넌트 렌더링 */}
-                                <MovieTrailerBtn modalContentId={modalContentId} showModal1={showModal} />
+                                <MovieTrailerBtn modalContentType={modalContentType} modalContentId={modalContentId} showModal1={showModal} />
                               {/* <button
                                 onClick={handlePlayBtnClick2}
                                 ref={target}

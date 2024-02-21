@@ -8,10 +8,11 @@ import { faVideo, faXmark } from "@fortawesome/free-solid-svg-icons";
 // 타입 설정
 interface MovieTrailerBtnProps {
   modalContentId: number;
+  modalContentType: String;
   showModal1: boolean;
 }
 
-const MovieTrailerBtn: React.FC<MovieTrailerBtnProps> = ({ modalContentId, showModal1 }) => {
+const MovieTrailerBtn: React.FC<MovieTrailerBtnProps> = ({ modalContentId, modalContentType, showModal1 }) => {
   const [showTrailer, setShowTrailer] = useState(false);
 
   const handleOpenTrailer = () => {
@@ -46,7 +47,7 @@ const MovieTrailerBtn: React.FC<MovieTrailerBtnProps> = ({ modalContentId, showM
         {/* 트레일러 fullscreen 처리 */}
       <Modal show={showTrailer} fullscreen={true} onHide={handleCloseTrailer} >
         <Modal.Body className="position-relative p-0">
-          <MovieTrailer modalContentId={modalContentId} />
+          <MovieTrailer modalContentType={modalContentType} modalContentId={modalContentId} />
           <Button onClick={handleCloseTrailer} className="position-absolute top-0 end-0 fs-4 backTrans borderTrans">
             <FontAwesomeIcon icon={faXmark} className="fs-4 btnAnimation closeBtn" />
           </Button>
