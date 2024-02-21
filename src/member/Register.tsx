@@ -67,8 +67,6 @@ function Register({ show, onHide, setLoginModalShow, propsInfo }: RegisterProps)
   });
 
   useEffect(() => {
-    console.log("프롭스정보");
-    console.log(propsInfo.email);
     setUserInfo(prevUserInfo => ({
       ...prevUserInfo,
       gender: propsInfo.gender,
@@ -201,9 +199,10 @@ function Register({ show, onHide, setLoginModalShow, propsInfo }: RegisterProps)
     window.location.href="/";
   }
 
+  // 회원가입
   const formSubmit = async (e:React.MouseEvent<HTMLButtonElement>) => {
     // 유효성 검사 통과시 회원가입
-    if (buttonClicked&&userInfo.username.length>7) {
+    if (buttonClicked&&doubleCheckMessage==='green') {
       await call("/member/register","POST",userInfo);
 
       setUserInfo({
@@ -217,7 +216,7 @@ function Register({ show, onHide, setLoginModalShow, propsInfo }: RegisterProps)
       });
       setRegistSuccessModal(true);
     } else {
-      console.error("정보를 다시 입력하세요.");      
+      alert("정보를 다시 입력해주세요");
     }
   };
 
