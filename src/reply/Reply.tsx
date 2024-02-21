@@ -9,13 +9,21 @@ import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 
 import { ReactComponent as StarIcon } from '../image/star-fill.svg';
 import styles from "../style/StarRating.module.css";
+import AverageRating from "./AverageRating";
+import { call } from "../service/ApiService";
 
 interface ReplyProps {
+  id:string | null;
   username:string;
   contentType:string;
   contentId:number;
   img:string;
   replySubmit: (replyInfo:ReplyInfo) => void;
+  ratingSubmit: (starInfo:StarInfo) => Promise<any>;
+  setStarClicked: React.Dispatch<React.SetStateAction<boolean[]>>;
+  starScore: number;
+  setStarScore: React.Dispatch<React.SetStateAction<number>>;
+  showModal: boolean;
 }
 
 interface ReplyInfo {
@@ -28,7 +36,16 @@ interface ReplyInfo {
   img:string;
 }
 
-function Reply({username, contentType, contentId, img, replySubmit}:ReplyProps) {
+interface StarInfo {
+  rno:number;
+  id:string | null;
+  contentType:string;
+  contentId:number;
+  score:number;
+  username:string;
+}
+
+function Reply({username, contentType, contentId, img, replySubmit, ratingSubmit, showModal}:ReplyProps) {
   const accessToken = localStorage.getItem("ACCESS_TOKEN"); // 토큰값 설정
   const [show, setShow] = useState(false); // 경고창 세팅
 
@@ -55,6 +72,8 @@ function Reply({username, contentType, contentId, img, replySubmit}:ReplyProps) 
       })
   }
 
+  const id = localStorage.getItem('userId');
+
   // 별 5개를 생성하는 더미값
   const ARRAY = [0, 1, 2, 3, 4];
 
@@ -64,51 +83,125 @@ function Reply({username, contentType, contentId, img, replySubmit}:ReplyProps) 
   // 별점 위에서 마우스를 움직였을 때, 표기되는 별점 값을 저장하는 useState
   const [starHovered, setStarHovered] = useState(-1);
 
+  // 별점 클릭 결과를 저장할 state를 추가
+  const [clickedStarScore, setClickedStarScore] = useState(0);
+
+  // 별점 값을 상태로 관리
+  const [starScore, setStarScore] = useState(0);
+
   // 별을 클릭했을 때, 그 값을 받아서 setStarClicked로 넘겨주는 설정. 클릭했을 때의 el값을 index로 받아서 처리.
   const handleStarClick = (index: number) => {
-    console.log(index);
+    console.log("StarRating-handleStarClick 컴포넌트 렌더링됨");
     setStarClicked((prevStarClicked) => {
-      // 같은 별을 한 번 더 클릭하여 초기화하는 동작을 구분하기 위해 starClicked, prevStarClicked, newStarClicked 로 구분
-      console.log(...prevStarClicked);
       const newStarClicked = [...prevStarClicked];
-      
-      // 같은 별점 칸을 한 번 더 클릭하면 해당 별점 값이 초기화되도록 설정
-      if (newStarClicked[index]) {
-        newStarClicked.fill(false);
-      } else {
-        for (let i = 0; i < 5; i++) {
-          newStarClicked[i] = i <= index ? true : false;
-        }
+  
+      // 클릭한 별 이전까지만 true로 설정
+      for (let i = 0; i <= index; i++) {
+        newStarClicked[i] = true;
       }
 
-      // 업데이트된 starRating 값을 가지고 replySubmit을 호출
-      // const score = newStarClicked.filter(Boolean).length;
-      // replySubmit({
-      //   ...replyInfo,
-      //   starRating: score,
-      // });
-
-      return newStarClicked;
+      // 클릭한 별 이후의 별은 false로 설정
+      for (let i = index + 1; i < 5; i++) {
+        newStarClicked[i] = false;
+      }
+  
+      // 클릭한 별의 점수 정보를 서버로 전송하여 등록 또는 업데이트
+      const score = newStarClicked.filter(Boolean).length;
+      console.log("StarRating-score 호출됨")
+      const updatedStarInfo = {
+        rno:0,
+        id,
+        contentType,
+        contentId,
+        score,
+        username,
+      };
+  
+      // 동일한 별점이 한 번 더 클릭되었을 때 삭제를 동작
+      if (score === clickedStarScore) {
+        // 별점 삭제 API 호출
+        deleteRating(updatedStarInfo);
+        
+        // 별점을 삭제한 후 해당 별점을 초기화
+        setStarScore(0); // 별점을 삭제하면 starScore도 0으로 설정
+        setClickedStarScore(0); // 클릭한 별점 점수도 0으로 초기화
+        return Array(5).fill(false);
+      } else {
+        // 등록 또는 업데이트 API 호출
+        ratingSubmit(updatedStarInfo).then((response) => {
+          // 서버로부터 응답을 받고 clickedStarScore 업데이트
+          // setClickedStarScore(index + 1);
+          setClickedStarScore(response.score);
+        });      
+  
+        // 별점 값을 변경
+        setStarScore(newStarClicked.filter(Boolean).length); // setStarScore 함수를 사용하여 별점 값을 변경
+  
+        return newStarClicked;
+      }
     });
+  };  
+
+  // Delete API 호출 함수
+  const deleteRating = async (starInfo: {
+      contentType: string; contentId: number; score: number; // 삭제할 별의 점수 정보
+      username: string;
+    }) => {
+    try {
+        // 별점 삭제 API 호출
+        const response = await call("/star_rating/delete_rating", "DELETE", starInfo);
+        console.log("별점 삭제 성공:", response);
+
+        // 별점을 삭제한 후 해당 별점을 초기화
+        setStarClicked(Array(5).fill(false));
+        setStarScore(0); // 별점을 삭제하면 starScore도 0으로 설정
+    } catch (error) {
+        console.error("별점 삭제 중 오류 발생:", error);
+    }
   };
 
   // 별점 위로 마우스를 움직였을 때, 값을 표시해주는(별에 불이 들어오는) 기능 설정
   const handleStarHover = (index: number) => {
     setStarHovered(index);
+    setStarScore(index + 1); // 별점 값을 변경
   };
 
   // 별점 밖으로 마우스를 움직였을 때, setStarHovered값을 초기화하는 기능 설정
   const handleMouseLeave = () => {
     setStarHovered(-1);
+    fetchRating(); // 마우스가 별점 밖으로 움직였을 때 별점 정보를 데이터베이스에서 가져옴
+  };
+
+  const fetchRating = async () => {
+    // 별점 클릭 이후에만 fetchRating 함수 실행
+    // if (!isStarClicked) return;
+    console.log("Reply-fetchRating 실행");
+
+    const response = await call(`/star_rating/retrieve_rating?id=${id}&contentType=${contentType}&contentId=${contentId}&username=${username}`, "GET");
+    console.log("Reply-response", response);
+    
+    // response에서 별점 정보를 가져와서 화면에 표시
+    const score = response.score;
+    console.log("Reply-response-score", score);
+    const newStarClicked = [false, false, false, false, false];
+    for (let i = 0; i < score; i++) {
+      newStarClicked[i] = true;
+    }
+    
+    setStarClicked(newStarClicked);
+    setStarScore(score);
   };
 
   // 별점을 클릭했을 때, 변화를 감지하고 현재 클릭된 별점의 개수를 계산하여 콘솔에 출력하는 기능 설정
   useEffect(() => {
+    if (showModal) {
+      fetchRating();
+    }
     sendReview();
-  }, [starClicked]);
-
+  }, [showModal]);
   
   const sendReview = () => {
+    console.log("StarRating-sendReview 호출됨");
     let score = starClicked.filter(Boolean).length;
     console.log("별점 :", score);
   };
@@ -147,13 +240,12 @@ function Reply({username, contentType, contentId, img, replySubmit}:ReplyProps) 
         <Col className={styles.Wrap}>
           <h1 className={styles.RatingText}>내 별점</h1>
           <div className="d-flex flex-column align-items-center">
-            <span className="text-white fs-3">5.0</span>
+            <span className="text-white fs-3">{starScore || "0"}.0</span>
             <div className={styles.Stars}>
-              {ARRAY.map((el, idx) => {
+              {ARRAY.map((el, index) => {
                 return (
                   <StarIcon
-                    key={idx}
-                    // size="30"
+                    key={index}
                     onMouseOver={() => handleStarHover(el)}
                     onClick={() => handleStarClick(el)}
                     onMouseLeave={handleMouseLeave}
@@ -172,24 +264,12 @@ function Reply({username, contentType, contentId, img, replySubmit}:ReplyProps) 
         <Col className={styles.Wrap}>
           <h1 className={styles.RatingText}>평균 별점</h1>
           <div className="d-flex flex-column align-items-center">
-            <span className="text-white fs-3">5.0</span>
             <div className={styles.Stars}>
-              {ARRAY.map((el, idx) => {
-                return (
-                  <StarIcon
-                    key={idx}
-                    // size="30"
-                    onMouseOver={() => handleStarHover(el)}
-                    onClick={() => handleStarClick(el)}
-                    onMouseLeave={handleMouseLeave}
-                    className={
-                      (starHovered !== -1 && starHovered >= el) || starClicked[el]
-                        ? styles.redStar
-                        : ""
-                    }
-                  />
-                );
-              })}
+              <AverageRating 
+                contentType={contentType}
+                contentId={contentId}
+                starClicked={handleStarClick}
+              />
             </div>
           </div>
         </Col>

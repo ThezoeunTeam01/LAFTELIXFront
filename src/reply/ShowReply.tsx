@@ -5,6 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { faEllipsisVertical, faPencil, faTrashCan, faHeart, faThumbsUp, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ReactComponent as StarDisplayIcon } from '../image/star-fill.svg';
 
 type ReplyInfo = {
   rno:number;
@@ -13,18 +14,47 @@ type ReplyInfo = {
   contentId:number|null;
   reply:string;
   img:string;
+  id:string | null;
 }
 
 type ShowReplyProps = {
   replyInfo:ReplyInfo;
   updateReplyInfos:(replyInfo:ReplyInfo) => void;
   deleteReplyInfos:(rno:number) => void;
+  id:string | null;
 }
+
+type StarEntity = {
+  id: string | null;
+  contentId: number;
+  contentType: string;
+  username: string;
+  score: number;
+};
 
 function ShowReply({replyInfo, updateReplyInfos, deleteReplyInfos}:ShowReplyProps) {
 
   // 댓글 수정
   const [updateContent,setUpdateContent] = useState(replyInfo);
+
+  // 별점 값
+  const [starEntities, setStarEntities] = useState<StarEntity[]>([]);
+
+  // 별점 값을 불러오는 함수
+  const fetchStarScore = async () => {
+    const response: StarEntity[] = await call(`/star_rating/get_ratings?&contentType=${replyInfo.contentType}&contentId=${replyInfo.contentId}`, "GET");
+    console.log("fetchStarScore:", response);
+    
+    if (response && Array.isArray(response)) {
+      setStarEntities(response);
+    } else {
+      console.error('별점 정보를 불러오는데 실패했습니다.');
+    }
+  };
+
+  useEffect(() => {
+    fetchStarScore();
+  }, [replyInfo]);
 
   // reaonly 관리
   const [isReadOnly, setIsReadOnly] = useState(true);
@@ -57,9 +87,17 @@ function ShowReply({replyInfo, updateReplyInfos, deleteReplyInfos}:ShowReplyProp
     }
   }
   // 삭제 버튼
-  const deleteButton = (e:React.MouseEvent<HTMLButtonElement>) => {
+  const deleteButton = async (e:React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     deleteReplyInfos(replyInfo.rno);
+  
+    // 별점 삭제
+    await call("/star_rating/delete_rating", "DELETE", {
+      userId: replyInfo.id,
+      contentType: replyInfo.contentType,
+      contentId: replyInfo.contentId,
+      username: replyInfo.username
+    });
   }
 
   // 댓글 좋아요
@@ -111,15 +149,24 @@ function ShowReply({replyInfo, updateReplyInfos, deleteReplyInfos}:ShowReplyProp
   return(
       <Form className="pd30 border-bottom border-dark">        
         <Row className="align-items-center mb-2"> 
-          {/* 여기에 별점 표시 추가 */}
-
-          {/* 별점 누르면 하위 컴포넌트 사라지는 이슈 있음 - 수정 요청 필요함. */}
           <Col className="">
             <Form.Group controlId="content">
               <Form.Label>
                 <div className="d-flex gap-2 text-white align-items-center">
-                   <FontAwesomeIcon icon={faStar} /> <FontAwesomeIcon icon={faStar} /> <FontAwesomeIcon icon={faStar} /> <FontAwesomeIcon icon={faStar} /> <FontAwesomeIcon icon={faStar} />
-                  <span className="text-white fs-6">5.0</span>
+                  {starEntities.map((entity, index) => {
+                    if (entity.username === replyInfo.username) {
+                      return (
+                        <div className="d-flex gap-2 text-white align-items-center" key={index}>
+                          {/* 별점 표시 */}
+                          {[1, 2, 3, 4, 5].map((index) => (
+                            <StarDisplayIcon key={index} style={{ color: index <= Math.round(entity.score) ? 'red' : 'grey' }} />
+                          ))}
+                          <span className="text-white fs-6">{entity.score}.0</span>
+                        </div>
+                      );
+                    }
+                    return null; // map 함수에서는 항상 무언가를 반환해야 합니다.
+                  })}
                 </div>
               </Form.Label>
             </Form.Group>

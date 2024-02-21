@@ -45,6 +45,7 @@ interface ReplyInfos {
   contentType: string;
   reply: string;
   img: string;
+  id: string | null;
 }
 
 type ReplyInfo = {
@@ -64,6 +65,15 @@ interface SelectContentsProps {
 }
 interface LikeButton {
   isLiked: boolean;
+}
+
+interface StarInfo {
+  rno:number;
+  id:string | null;
+  contentType:string;
+  contentId:number | null;
+  score:number;
+  username:string;
 }
 
 function SelectContents({
@@ -222,6 +232,41 @@ function SelectContents({
     console.log(response);
 
     setReplyInfos(response);
+  };
+
+  // 별점 값을 상태로 관리
+  const [starScore, setStarScore] = useState(0);
+
+  // 별점 등록
+  const ratingSubmit = async (starInfo: StarInfo) => {
+    console.log("ratingSubmit 컴포넌트 렌더링");
+
+    try {
+      // 이미 해당 사용자가 해당 컨텐츠에 대한 별점을 등록했는지 확인
+      console.log("call함수시작");
+
+      const existsStar = await call(`/star_rating/retrieve_rating?id=${starInfo.id}
+                                  &contentType=${starInfo.contentType}&contentId=${starInfo.contentId}
+                                  &username=${starInfo.username}`, "GET");
+
+
+      let response; // 변수를 선언
+      if (Object.keys(existsStar).length === 0) {
+        // 별점이 등록되지 않은 경우 create 호출
+        response = await call("/star_rating/create_rating", "POST", starInfo); // 변수에 값을 할당
+        console.log("별점 등록 성공:", response);
+        setStarScore(starInfo.score); // 별점 상태 업데이트
+      } else {
+        // 이미 별점이 등록된 경우 update 호출
+        starInfo.rno = existsStar.rno; // rno를 starInfo에 추가
+        response = await call(`/star_rating/update_rating?rno=${starInfo.rno}`, "PUT", starInfo); // rno를 사용해서 별점 업데이트
+        console.log("별점 업데이트 성공:", response);
+        setStarScore(starInfo.score); // 별점 상태 업데이트
+      }
+      return response; // API 호출의 응답을 반환
+    } catch (error) {
+      console.error("별점 처리 중 오류 발생:", error);
+    }
   };
 
   //**************************모달 관련**********************
@@ -402,12 +447,19 @@ function SelectContents({
             <Tab eventKey="like" title="리뷰 댓글">
               {/* 리플 영역 */}
               <Reply
+                id={localStorage.getItem('userId')}
                 username={username}
                 contentId={modalContentId}
                 contentType={modalContentType}
                 img={img}
                 replySubmit={replySubmit}
-              />
+                ratingSubmit={ratingSubmit}
+                starScore={starScore}
+                setStarScore={setStarScore} 
+                showModal={modalControll} // showModal 상태 전달
+                setStarClicked={function (value: React.SetStateAction<boolean[]>): void {
+                  throw new Error("Function not implemented.");
+                } } />
               <ListGroup>
                 {replyInfos &&
                   replyInfos.map((replyInfo) => (
@@ -416,6 +468,7 @@ function SelectContents({
                         updateReplyInfos={updateReplyInfos}
                         deleteReplyInfos={deleteReplyInfos}
                         replyInfo={replyInfo}
+                        id={userId}
                       />
                   ))}
               </ListGroup>
