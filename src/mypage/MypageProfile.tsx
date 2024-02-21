@@ -170,21 +170,32 @@ function MypageProfile() {
     fetchData();
   },[userId]);
 
-  const deleteProfile = async () => {
+  // 회원탈퇴
+
+  const [deleteModal, setDeleteModal] = useState(false);
+
+  const deleteProfile = (e:React.MouseEvent<HTMLButtonElement>) => {
     try {
-      // 서버 측 API 엔드포인트에 DELETE 요청을 보냅니다.
-      // 예시: "/api/profile/:userId"
-      await call(`/member?id=${userId}`, "DELETE");
+      setDeleteModal(true);
+     
+    } catch (error) {
+      console.error("프로필 삭제 실패", error);
+    }
+  };
+
+  const deleteButton = async(e:React.MouseEvent<HTMLButtonElement>) => {
+     await call(`/member?id=${userId}`, "DELETE");
       // 삭제가 성공하면 로컬 스토리지에서도 관련된 정보를 제거합니다.
       localStorage.removeItem("userId");
       localStorage.removeItem("username");
       localStorage.removeItem("img");
       localStorage.removeItem("ACCESS_TOKEN");
+      setDeleteModal(false);
       window.location.href="/";
-    } catch (error) {
-      console.error("프로필 삭제 실패", error);
-    }
-  };
+  }
+  const cancelButton = (e:React.MouseEvent<HTMLButtonElement>) => {
+    setDeleteModal(false);
+  }
 
 
   // 프로필 모달 닫기 버튼 추가
@@ -319,6 +330,13 @@ function MypageProfile() {
                           <Button className="submitBtn flexBtn" value="Submit" onClick={formSubmit2}>수정</Button>  
                         </div>
                       </Modal.Body>
+                    </Modal>
+                    <Modal show={deleteModal}>
+                     <Modal.Body>
+                      <Modal.Title>회원을 탈퇴하시겠습니까?</Modal.Title>
+                      <Button onClick={deleteButton}>확인</Button>
+                      <Button onClick={cancelButton}>취소</Button>
+                     </Modal.Body>
                     </Modal>
                 </Modal>
             </div>

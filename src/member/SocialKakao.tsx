@@ -2,7 +2,7 @@ import { Button } from "react-bootstrap";
 
 
 function SocialKaKao () {
-  const Rest_api_key='01074d8866978b72ce430120a459bdf7'
+  const Rest_api_key='346c17bdd5f28dbcc5448079dcc42ea9'
   
   const redirect_uri = 'http://localhost:3001'
 
