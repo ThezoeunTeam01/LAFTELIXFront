@@ -78,7 +78,9 @@ const MovieSlide: FC = () => {
     // interval={null} - 슬라이드 멈추고 싶으면 추가
     <Carousel fade className="">
       {contents.map((content: Content) => (
-        <CarouselItem key={content.id} style={{ cursor: `pointer` }}>
+        <CarouselItem key={content.id} style={{ cursor: `pointer` }} onClick={() => {
+          openModal(content.id, content.media_type);
+        }}>
           <div className="vw-100 vh-100">
             <div className="w-100 h-100 position-absolute top-0 start-0 dimBg"></div>
             {/* <div className=""> */}
@@ -92,11 +94,7 @@ const MovieSlide: FC = () => {
           </div>
 
           <Carousel.Caption>
-            <Container
-              onClick={() => {
-                openModal(content.id, content.media_type);
-              }}
-            >
+            <Container>
               <div
                 className="d-flex flex-column justify-content-end"
                 style={{ width: `45%`, marginBottom: `100px` }}
