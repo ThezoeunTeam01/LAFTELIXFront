@@ -201,8 +201,10 @@ function Register({ show, onHide, setLoginModalShow, propsInfo }: RegisterProps)
 
   // 회원가입
   const formSubmit = async (e:React.MouseEvent<HTMLButtonElement>) => {
+    console.log(pwCheckColor);
+    console.log(doubleCheckMessage);
     // 유효성 검사 통과시 회원가입
-    if (buttonClicked&&doubleCheckMessage==='green') {
+    if (pwCheckColor==='green'&&doubleCheckMessageColor==='green') {
       await call("/member/register","POST",userInfo);
 
       setUserInfo({

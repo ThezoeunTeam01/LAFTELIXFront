@@ -1,2 +1,2 @@
 root: npm install serve -g
-web: serve -s build
+web: serve -s build -l 8080
