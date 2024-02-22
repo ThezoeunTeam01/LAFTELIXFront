@@ -312,9 +312,14 @@ function MainHeader() {
       <div className="postion-absolute" style={{top:`80px`}}>
         <Modal show={registerContinueModal} centered>
           <Modal.Body>
-            <Modal.Title className="text-center mb40 fs-3">회원이 아닙니다.회원가입을 진행하시겠습니까?</Modal.Title>
-            <Button onClick={ContinueCalcel}>취소</Button>
-            <Button onClick={ContinueConfirm}>확인</Button>
+            <Modal.Title className="text-center mt-4 mb-4 fs-5">
+              아직 회원이 아닙니다.<br />
+              회원가입을 진행하시겠습니까?
+            </Modal.Title>
+            <div className="d-flex gap-2 justify-content-end">
+            	<Button onClick={ContinueCalcel}>취소</Button>
+            	<Button onClick={ContinueConfirm}>확인</Button>
+            </div>
           </Modal.Body>
         </Modal>
       </div>
