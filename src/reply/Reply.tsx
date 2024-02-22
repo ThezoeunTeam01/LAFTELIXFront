@@ -89,57 +89,62 @@ function Reply({username, contentType, contentId, img, replySubmit, ratingSubmit
   // 별점 값을 상태로 관리
   const [starScore, setStarScore] = useState(0);
 
+
   // 별을 클릭했을 때, 그 값을 받아서 setStarClicked로 넘겨주는 설정. 클릭했을 때의 el값을 index로 받아서 처리.
   const handleStarClick = (index: number) => {
-    console.log("StarRating-handleStarClick 컴포넌트 렌더링됨");
-    setStarClicked((prevStarClicked) => {
-      const newStarClicked = [...prevStarClicked];
-  
-      // 클릭한 별 이전까지만 true로 설정
-      for (let i = 0; i <= index; i++) {
-        newStarClicked[i] = true;
-      }
+    if(accessToken!==null){
+      console.log("StarRating-handleStarClick 컴포넌트 렌더링됨");
+      setStarClicked((prevStarClicked) => {
+        const newStarClicked = [...prevStarClicked];
+    
+        // 클릭한 별 이전까지만 true로 설정
+        for (let i = 0; i <= index; i++) {
+          newStarClicked[i] = true;
+        }
 
-      // 클릭한 별 이후의 별은 false로 설정
-      for (let i = index + 1; i < 5; i++) {
-        newStarClicked[i] = false;
-      }
-  
-      // 클릭한 별의 점수 정보를 서버로 전송하여 등록 또는 업데이트
-      const score = newStarClicked.filter(Boolean).length;
-      console.log("StarRating-score 호출됨")
-      const updatedStarInfo = {
-        rno:0,
-        id,
-        contentType,
-        contentId,
-        score,
-        username,
-      };
-  
-      // 동일한 별점이 한 번 더 클릭되었을 때 삭제를 동작
-      if (score === clickedStarScore) {
-        // 별점 삭제 API 호출
-        deleteRating(updatedStarInfo);
-        
-        // 별점을 삭제한 후 해당 별점을 초기화
-        setStarScore(0); // 별점을 삭제하면 starScore도 0으로 설정
-        setClickedStarScore(0); // 클릭한 별점 점수도 0으로 초기화
-        return Array(5).fill(false);
-      } else {
-        // 등록 또는 업데이트 API 호출
-        ratingSubmit(updatedStarInfo).then((response) => {
-          // 서버로부터 응답을 받고 clickedStarScore 업데이트
-          // setClickedStarScore(index + 1);
-          setClickedStarScore(response.score);
-        });      
-  
-        // 별점 값을 변경
-        setStarScore(newStarClicked.filter(Boolean).length); // setStarScore 함수를 사용하여 별점 값을 변경
-  
-        return newStarClicked;
-      }
-    });
+        // 클릭한 별 이후의 별은 false로 설정
+        for (let i = index + 1; i < 5; i++) {
+          newStarClicked[i] = false;
+        }
+    
+        // 클릭한 별의 점수 정보를 서버로 전송하여 등록 또는 업데이트
+        const score = newStarClicked.filter(Boolean).length;
+        console.log("StarRating-score 호출됨")
+        const updatedStarInfo = {
+          rno:0,
+          id,
+          contentType,
+          contentId,
+          score,
+          username,
+        };
+    
+        // 동일한 별점이 한 번 더 클릭되었을 때 삭제를 동작
+        if (score === clickedStarScore) {
+          // 별점 삭제 API 호출
+          deleteRating(updatedStarInfo);
+          
+          // 별점을 삭제한 후 해당 별점을 초기화
+          setStarScore(0); // 별점을 삭제하면 starScore도 0으로 설정
+          setClickedStarScore(0); // 클릭한 별점 점수도 0으로 초기화
+          return Array(5).fill(false);
+        } else {
+          // 등록 또는 업데이트 API 호출
+          ratingSubmit(updatedStarInfo).then((response) => {
+            // 서버로부터 응답을 받고 clickedStarScore 업데이트
+            // setClickedStarScore(index + 1);
+            setClickedStarScore(response.score);
+          });      
+    
+          // 별점 값을 변경
+          setStarScore(newStarClicked.filter(Boolean).length); // setStarScore 함수를 사용하여 별점 값을 변경
+    
+          return newStarClicked;
+        }
+      });
+    } else{
+      alert("로그인후 가능");
+    }
   };  
 
   // Delete API 호출 함수
